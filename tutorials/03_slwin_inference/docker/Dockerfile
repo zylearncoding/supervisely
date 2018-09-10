@@ -57,15 +57,7 @@ RUN conda install -y -c soumith \
         cuda90=1.0 \
     && conda clean --all --yes
 RUN pip install shapely python-json-logger scikit-image
-#ENV PYTHONPATH /workdir
-ENV PYTHONPATH /workdir:/workdir/supervisely_lib/worker_proto:$PYTHONPATH
-ENV LANG C.UTF-8
-#RUN pip install pydevd
-#ENV PYTHONPATH /workdir:/workdir/supervisely_lib:$PYTHONPATH
-COPY nn/unet_v2/src/* /workdir/src/unet_src/
-COPY tutorials/03_slwin_inference/src/* /workdir/src/
-COPY supervisely_lib/* /workdir/supervisely_lib/
-COPY task_data/* /sly_task_data/
-COPY nn/unet_v2/src/schemas.json /workdir/src/schemas.json
+ENV PYTHONPATH /workdir/src/unet_src:$PYTHONPATH
 WORKDIR /workdir/src
+
 
