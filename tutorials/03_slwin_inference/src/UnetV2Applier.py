@@ -97,7 +97,7 @@ class UnetV2Applier:
 
         sly.update_recursively(config, input_config)
         logger.info('Full config', extra={'config': config})
-        SettingsValidator.validate_inference_cfg(config)
+        #SettingsValidator.validate_inference_cfg(config)
         self.config = config
 
     def _load_train_config(self):
