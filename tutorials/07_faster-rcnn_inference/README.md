@@ -31,7 +31,7 @@ Download NN from your account. Then unpack archive to the folder `tutorials/07_f
 Execute the following commands:
 
 ```
-cd tutorials/07_faster-rcnn_inferencedocker
+cd tutorials/07_faster-rcnn_inference/docker
 ./run.sh
 ```
 
