@@ -1,5 +1,5 @@
 # Description
-This repo contains a Jupyter Notebook that, which demonstrates how to open a supervisely project and draw images with annotations.
+This repo contains a Jupyter Notebook, which demonstrates how to open a supervisely project and draw images with annotations.
 
 # Clone repository
 ``` 
@@ -7,7 +7,7 @@ git clone https://github.com/supervisely/supervisely.git
 ```
 
 # Preparation with supervisely project
-Download project from your account. Then unpack archive to the folder `tutorials/04_project_tutorial/data/project`. Also, you need some empty folders `result`, `tmp` and file `task_settings.json`  For example, `04_project_tutorial` folder will look like this:
+Download project from your account. Then unpack archive to the folder `tutorials/04_project_tutorial/data/project`. Also, you need some empty folders `result`, `tmp` and file `task_settings.json`.  For example, `04_project_tutorial` folder will look like this:
 
 ```
 .
