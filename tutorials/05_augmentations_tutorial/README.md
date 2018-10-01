@@ -13,17 +13,17 @@ Download project from your account. Then unpack archive to the folder `tutorials
 ```
 .
 ├── data
-│   ├── data
-│   │   └── project
-│   │  		├── Test Project__London
-│   │  		└── meta.json
-│   ├── result
-│   ├── tmp
-│   └── task_settings.json
+│   ├── data
+│   │   └── project
+│   │  		├── Test Project__London
+│   │  		└── meta.json
+│   ├── result
+│   ├── tmp
+│   └── task_settings.json
 │
 ├── docker
-│   ├── Dockerfile
-│   └── run.sh
+│   ├── Dockerfile
+│   └── run.sh
 ├── README.md
 ├── result.png
 └── src
@@ -50,5 +50,5 @@ After that, run in browser:
 http://localhost:8888/?token=your_token
 ```
 
-After running `05_augmentations_tutorial`, you get the following results: 
+After running `05_augmentations_tutorial.ipynb`, you get the following results: 
 ![Result](result.png)
