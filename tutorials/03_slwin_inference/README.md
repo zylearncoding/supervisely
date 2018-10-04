@@ -49,6 +49,7 @@ cd tutorials/03_slwin_inference/docker
 
 to build docker image and run the container. Then, within the container:
 ``` 
+cp unet_src/schemas.json schemas.json
 jupyter notebook --allow-root --ip=0.0.0.0
 ```
 Your token will be shown in terminal.
