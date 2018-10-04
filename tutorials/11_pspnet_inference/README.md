@@ -44,8 +44,7 @@ After that, run in browser:
 ```
 http://localhost:8888/?token=your_token
 ```
-If you'l have some errors, when applying string `applier = SSDFastApplier(settings)` you need to remove `override_base_feature_extractor_hyperparams: true`
-from the model config file.
+
 After running `11_pspnet_inference.ipynb`, you get the following results:
 ![Segmentation](result.png)
 
