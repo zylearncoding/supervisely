@@ -1,1 +1,25 @@
-{"res_names": {"project": "test"}, "preset": "Images"}
+{
+  "gpu_devices": [
+    0
+  ],
+  "model_classes": {
+    "save_classes": "__all__",
+    "add_suffix": "_unet"
+  },
+  "existing_objects": {
+    "save_classes": [],
+    "add_suffix": ""
+  },
+  "mode": {
+    "source": "sliding_window",
+    "window": {
+      "width": 400,
+      "height": 400
+    },
+    "min_overlap": {
+      "x": 60,
+      "y": 60
+    },
+    "save": true
+  }
+}
