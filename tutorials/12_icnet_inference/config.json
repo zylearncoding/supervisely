@@ -1,0 +1,935 @@
+{
+  "settings":{
+  "input_size": {
+    "width": 256,
+    "height": 256
+  },
+  "batch_size": {
+    "train": 12,
+    "val": 6
+  },
+  "dataset_tags": {
+    "train": "train",
+    "val": "val"
+  },
+  "data_workers": {
+    "train": 3,
+    "val": 0
+  },
+  "special_classes": {
+    "background": "bg",
+    "neutral": "neutral"
+  },
+  "filter_scale": 2,
+  "epochs": 3,
+  "val_every": 0.5,
+  "lr": 0.0001,
+  "gpu_devices": [
+    0
+  ]},
+  "weights_init_type": "transfer_learning",
+    "out_classes": [
+    {
+      "color": [120, 120, 120],
+      "shape": "rectangle",
+      "title": "wall"
+    },
+    {
+      "color": [180, 120, 120],
+      "shape": "rectangle",
+      "title": "building;edifice"
+    },
+    {
+      "color": [ 6, 230, 230],
+      "shape": "rectangle",
+      "title": "sky"
+    },
+    {
+      "color": [80, 50, 50],
+      "shape": "rectangle",
+      "title": "floor;flooring"
+    },
+    {
+      "color": [ 4, 200, 3],
+      "shape": "rectangle",
+      "title": "tree"
+    },
+    {
+      "color": [120, 120, 80],
+      "shape": "rectangle",
+      "title": "ceiling"
+    },
+    {
+      "color": [140, 140, 140],
+      "shape": "rectangle",
+      "title": "road;route"
+    },
+    {
+      "color": [204, 5, 255],
+      "shape": "rectangle",
+      "title": "bed"
+    },
+    {
+      "color": [230, 230, 230],
+      "shape": "rectangle",
+      "title": "windowpane;window"
+    },
+    {
+      "color": [ 4, 250, 7],
+      "shape": "rectangle",
+      "title": "grass"
+    },
+    {
+      "color": [224, 5, 255],
+      "shape": "rectangle",
+      "title": "cabinet"
+    },
+    {
+      "color": [235, 255, 7],
+      "shape": "rectangle",
+      "title": "sidewalk;pavement"
+    },
+    {
+      "color": [150, 5, 61],
+      "shape": "rectangle",
+      "title": "person;individual;someone;somebody;mortal;soul"
+    },
+    {
+      "color": [120, 120, 70],
+      "shape": "rectangle",
+      "title": "earth;ground"
+    },
+    {
+      "color": [ 8, 255, 51],
+      "shape": "rectangle",
+      "title": "door;double;door"
+    },
+    {
+      "color": [255, 6, 82],
+      "shape": "rectangle",
+      "title": "table"
+    },
+    {
+      "color": [143, 255, 140],
+      "shape": "rectangle",
+      "title": "mountain;mount"
+    },
+    {
+      "color": [204, 255, 4],
+      "shape": "rectangle",
+      "title": "plant;flora;plant;life"
+    },
+    {
+      "color": [255, 51, 7],
+      "shape": "rectangle",
+      "title": "curtain;drape;drapery;mantle;pall"
+    },
+    {
+      "color": [204, 70, 3],
+      "shape": "rectangle",
+      "title": "chair"
+    },
+    {
+      "color": [ 0, 102, 200],
+      "shape": "rectangle",
+      "title": "car;auto;automobile;machine;motorcar"
+    },
+    {
+      "color": [ 61, 230, 250],
+      "shape": "rectangle",
+      "title": "water"
+    },
+    {
+      "color": [255, 6, 51],
+      "shape": "rectangle",
+      "title": "painting;picture"
+    },
+    {
+      "color": [ 11, 102, 255],
+      "shape": "rectangle",
+      "title": "sofa;couch;lounge"
+    },
+    {
+      "color": [255, 7, 71],
+      "shape": "rectangle",
+      "title": "shelf"
+    },
+    {
+      "color": [255, 9, 224],
+      "shape": "rectangle",
+      "title": "house"
+    },
+    {
+      "color": [ 9, 7, 230],
+      "shape": "rectangle",
+      "title": "sea"
+    },
+    {
+      "color": [220, 220, 220],
+      "shape": "rectangle",
+      "title": "mirror"
+    },
+    {
+      "color": [255, 9, 92],
+      "shape": "rectangle",
+      "title": "rug;carpet;carpeting"
+    },
+    {
+      "color": [112, 9, 255],
+      "shape": "rectangle",
+      "title": "field"
+    },
+    {
+      "color": [ 8, 255, 214],
+      "shape": "rectangle",
+      "title": "armchair"
+    },
+    {
+      "color": [ 7, 255, 224],
+      "shape": "rectangle",
+      "title": "seat"
+    },
+    {
+      "color": [255, 184, 6],
+      "shape": "rectangle",
+      "title": "fence;fencing"
+    },
+    {
+      "color": [ 10, 255, 71],
+      "shape": "rectangle",
+      "title": "desk"
+    },
+    {
+      "color": [255, 41, 10],
+      "shape": "rectangle",
+      "title": "rock;stone"
+    },
+    {
+      "color": [ 7, 255, 255],
+      "shape": "rectangle",
+      "title": "wardrobe;closet;press"
+    },
+    {
+      "color": [224, 255, 8],
+      "shape": "rectangle",
+      "title": "lamp"
+    },
+    {
+      "color": [102, 8, 255],
+      "shape": "rectangle",
+      "title": "bathtub;bathing;tub;bath;tub"
+    },
+    {
+      "color": [255, 61, 6],
+      "shape": "rectangle",
+      "title": "railing;rail"
+    },
+    {
+      "color": [255, 194, 7],
+      "shape": "rectangle",
+      "title": "cushion"
+    },
+    {
+      "color": [255, 122, 8],
+      "shape": "rectangle",
+      "title": "base;pedestal;stand"
+    },
+    {
+      "color": [ 0, 255, 20],
+      "shape": "rectangle",
+      "title": "box"
+    },
+    {
+      "color": [255, 8, 41],
+      "shape": "rectangle",
+      "title": "column;pillar"
+    },
+    {
+      "color": [255, 5, 153],
+      "shape": "rectangle",
+      "title": "signboard;sign"
+    },
+    {
+      "color": [ 6, 51, 255],
+      "shape": "rectangle",
+      "title": "chest;of;drawers;chest;bureau;dresser"
+    },
+    {
+      "color": [235, 12, 255],
+      "shape": "rectangle",
+      "title": "counter"
+    },
+    {
+      "color": [160, 150, 20],
+      "shape": "rectangle",
+      "title": "sand"
+    },
+    {
+      "color": [ 0, 163, 255],
+      "shape": "rectangle",
+      "title": "sink"
+    },
+    {
+      "color": [140, 140, 140],
+      "shape": "rectangle",
+      "title": "skyscraper"
+    },
+    {
+      "color": [250, 10, 15],
+      "shape": "rectangle",
+      "title": "fireplace;hearth;open;fireplace"
+    },
+    {
+      "color": [ 20, 255, 0],
+      "shape": "rectangle",
+      "title": "refrigerator;icebox"
+    },
+    {
+      "color": [ 31, 255, 0],
+      "shape": "rectangle",
+      "title": "grandstand;covered;stand"
+    },
+    {
+      "color": [255, 31, 0],
+      "shape": "rectangle",
+      "title": "path"
+    },
+    {
+      "color": [255, 224, 0],
+      "shape": "rectangle",
+      "title": "stairs;steps"
+    },
+    {
+      "color": [153, 255, 0],
+      "shape": "rectangle",
+      "title": "runway"
+    },
+    {
+      "color": [ 0, 0, 255],
+      "shape": "rectangle",
+      "title": "case;display;case;showcase;vitrine"
+    },
+    {
+      "color": [255, 71, 0],
+      "shape": "rectangle",
+      "title": "pool;table;billiard;table;snooker;table"
+    },
+    {
+      "color": [ 0, 235, 255],
+      "shape": "rectangle",
+      "title": "pillow"
+    },
+    {
+      "color": [ 0, 173, 255],
+      "shape": "rectangle",
+      "title": "screen;door;screen"
+    },
+    {
+      "color": [ 31, 0, 255],
+      "shape": "rectangle",
+      "title": "stairway;staircase"
+    },
+    {
+      "color": [ 11, 200, 200],
+      "shape": "rectangle",
+      "title": "river"
+    },
+    {
+      "color": [255, 82, 0],
+      "shape": "rectangle",
+      "title": "bridge;span"
+    },
+    {
+      "color": [ 0, 255, 245],
+      "shape": "rectangle",
+      "title": "bookcase"
+    },
+    {
+      "color": [ 0, 61, 255],
+      "shape": "rectangle",
+      "title": "blind;screen"
+    },
+    {
+      "color": [ 0, 255, 112],
+      "shape": "rectangle",
+      "title": "coffee;table;cocktail;table"
+    },
+    {
+      "color": [ 0, 255, 133],
+      "shape": "rectangle",
+      "title": "toilet;can;commode;crapper;pot;potty;stool;throne"
+    },
+    {
+      "color": [255, 0, 0],
+      "shape": "rectangle",
+      "title": "flower"
+    },
+    {
+      "color": [255, 163, 0],
+      "shape": "rectangle",
+      "title": "book"
+    },
+    {
+      "color": [255, 102, 0],
+      "shape": "rectangle",
+      "title": "hill"
+    },
+    {
+      "color": [194, 255, 0],
+      "shape": "rectangle",
+      "title": "bench"
+    },
+    {
+      "color": [ 0, 143, 255],
+      "shape": "rectangle",
+      "title": "countertop"
+    },
+    {
+      "color": [ 51, 255, 0],
+      "shape": "rectangle",
+      "title": "stove;kitchen;stove;range;kitchen;range;cooking;stove"
+    },
+    {
+      "color": [ 0, 82, 255],
+      "shape": "rectangle",
+      "title": "palm;palm;tree"
+    },
+    {
+      "color": [ 0, 255, 41],
+      "shape": "rectangle",
+      "title": "kitchen;island"
+    },
+    {
+      "color": [ 0, 255, 173],
+      "shape": "rectangle",
+      "title": "computer;computing;machine;computing;device;data;processor;electronic;computer;information;processing;system"
+    },
+    {
+      "color": [ 10, 0, 255],
+      "shape": "rectangle",
+      "title": "swivel;chair"
+    },
+    {
+      "color": [173, 255, 0],
+      "shape": "rectangle",
+      "title": "boat"
+    },
+    {
+      "color": [ 0, 255, 153],
+      "shape": "rectangle",
+      "title": "bar"
+    },
+    {
+      "color": [255, 92, 0],
+      "shape": "rectangle",
+      "title": "arcade;machine"
+    },
+    {
+      "color": [255, 0, 255],
+      "shape": "rectangle",
+      "title": "hovel;hut;hutch;shack;shanty"
+    },
+    {
+      "color": [255, 0, 245],
+      "shape": "rectangle",
+      "title": "bus;autobus;coach;charabanc;double-decker;jitney;motorbus;motorcoach;omnibus;passenger;vehicle"
+    },
+    {
+      "color": [255, 0, 102],
+      "shape": "rectangle",
+      "title": "towel"
+    },
+    {
+      "color": [255, 173, 0],
+      "shape": "rectangle",
+      "title": "light;light;source"
+    },
+    {
+      "color": [255, 0, 20],
+      "shape": "rectangle",
+      "title": "truck;motortruck"
+    },
+    {
+      "color": [255, 184, 184],
+      "shape": "rectangle",
+      "title": "tower"
+    },
+    {
+      "color": [ 0, 31, 255],
+      "shape": "rectangle",
+      "title": "chandelier;pendant;pendent"
+    },
+    {
+      "color": [ 0, 255, 61],
+      "shape": "rectangle",
+      "title": "awning;sunshade;sunblind"
+    },
+    {
+      "color": [ 0, 71, 255],
+      "shape": "rectangle",
+      "title": "streetlight;street;lamp"
+    },
+    {
+      "color": [255, 0, 204],
+      "shape": "rectangle",
+      "title": "booth;cubicle;stall;kiosk"
+    },
+    {
+      "color": [ 0, 255, 194],
+      "shape": "rectangle",
+      "title": "television;television;receiver;television;set;tv;tv;set;idiot;box;boob;tube;telly;goggle;box"
+    },
+    {
+      "color": [ 0, 255, 82],
+      "shape": "rectangle",
+      "title": "airplane;aeroplane;plane"
+    },
+    {
+      "color": [ 0, 10, 255],
+      "shape": "rectangle",
+      "title": "dirt;track"
+    },
+    {
+      "color": [ 0, 112, 255],
+      "shape": "rectangle",
+      "title": "apparel;wearing;apparel;dress;clothes"
+    },
+    {
+      "color": [ 51, 0, 255],
+      "shape": "rectangle",
+      "title": "pole"
+    },
+    {
+      "color": [ 0, 194, 255],
+      "shape": "rectangle",
+      "title": "land;ground;soil"
+    },
+    {
+      "color": [ 0, 122, 255],
+      "shape": "rectangle",
+      "title": "bannister;banister;balustrade;balusters;handrail"
+    },
+    {
+      "color": [ 0, 255, 163],
+      "shape": "rectangle",
+      "title": "escalator;moving;staircase;moving;stairway"
+    },
+    {
+      "color": [255, 153, 0],
+      "shape": "rectangle",
+      "title": "ottoman;pouf;pouffe;puff;hassock"
+    },
+    {
+      "color": [ 0, 255, 10],
+      "shape": "rectangle",
+      "title": "bottle"
+    },
+    {
+      "color": [255, 112, 0],
+      "shape": "rectangle",
+      "title": "buffet;counter;sideboard"
+    },
+    {
+      "color": [143, 255, 0],
+      "shape": "rectangle",
+      "title": "poster;posting;placard;notice;bill;card"
+    },
+    {
+      "color": [ 82, 0, 255],
+      "shape": "rectangle",
+      "title": "stage"
+    },
+    {
+      "color": [163, 255, 0],
+      "shape": "rectangle",
+      "title": "van"
+    },
+    {
+      "color": [255, 235, 0],
+      "shape": "rectangle",
+      "title": "ship"
+    },
+    {
+      "color": [ 8, 184, 170],
+      "shape": "rectangle",
+      "title": "fountain"
+    },
+    {
+      "color": [133, 0, 255],
+      "shape": "rectangle",
+      "title": "conveyer;belt;conveyor;belt;conveyer;conveyor;transporter"
+    },
+    {
+      "color": [ 0, 255, 92],
+      "shape": "rectangle",
+      "title": "canopy"
+    },
+    {
+      "color": [184, 0, 255],
+      "shape": "rectangle",
+      "title": "washer;automatic;washer;washing;machine"
+    },
+    {
+      "color": [255, 0, 31],
+      "shape": "rectangle",
+      "title": "plaything;toy"
+    },
+    {
+      "color": [ 0, 184, 255],
+      "shape": "rectangle",
+      "title": "swimming;pool;swimming;bath;natatorium"
+    },
+    {
+      "color": [ 0, 214, 255],
+      "shape": "rectangle",
+      "title": "stool"
+    },
+    {
+      "color": [255, 0, 112],
+      "shape": "rectangle",
+      "title": "barrel;cask"
+    },
+    {
+      "color": [ 92, 255, 0],
+      "shape": "rectangle",
+      "title": "basket;handbasket"
+    },
+    {
+      "color": [ 0, 224, 255],
+      "shape": "rectangle",
+      "title": "waterfall;falls"
+    },
+    {
+      "color": [112, 224, 255],
+      "shape": "rectangle",
+      "title": "tent;collapsible;shelter"
+    },
+    {
+      "color": [ 70, 184, 160],
+      "shape": "rectangle",
+      "title": "bag"
+    },
+    {
+      "color": [163, 0, 255],
+      "shape": "rectangle",
+      "title": "minibike;motorbike"
+    },
+    {
+      "color": [153, 0, 255],
+      "shape": "rectangle",
+      "title": "cradle"
+    },
+    {
+      "color": [ 71, 255, 0],
+      "shape": "rectangle",
+      "title": "oven"
+    },
+    {
+      "color": [255, 0, 163],
+      "shape": "rectangle",
+      "title": "ball"
+    },
+    {
+      "color": [255, 204, 0],
+      "shape": "rectangle",
+      "title": "food;solid;food"
+    },
+    {
+      "color": [255, 0, 143],
+      "shape": "rectangle",
+      "title": "step;stair"
+    },
+    {
+      "color": [ 0, 255, 235],
+      "shape": "rectangle",
+      "title": "tank;storage;tank"
+    },
+    {
+      "color": [133, 255, 0],
+      "shape": "rectangle",
+      "title": "trade;name;brand;name;brand;marque"
+    },
+    {
+      "color": [255, 0, 235],
+      "shape": "rectangle",
+      "title": "microwave;microwave;oven"
+    },
+    {
+      "color": [245, 0, 255],
+      "shape": "rectangle",
+      "title": "pot;flowerpot"
+    },
+    {
+      "color": [255, 0, 122],
+      "shape": "rectangle",
+      "title": "animal;animate;being;beast;brute;creature;fauna"
+    },
+    {
+      "color": [255, 245, 0],
+      "shape": "rectangle",
+      "title": "bicycle;bike;wheel;cycle"
+    },
+    {
+      "color": [ 10, 190, 212],
+      "shape": "rectangle",
+      "title": "lake"
+    },
+    {
+      "color": [214, 255, 0],
+      "shape": "rectangle",
+      "title": "dishwasher;dish;washer;dishwashing;machine"
+    },
+    {
+      "color": [ 0, 204, 255],
+      "shape": "rectangle",
+      "title": "screen;silver;screen;projection;screen"
+    },
+    {
+      "color": [ 20, 0, 255],
+      "shape": "rectangle",
+      "title": "blanket;cover"
+    },
+    {
+      "color": [255, 255, 0],
+      "shape": "rectangle",
+      "title": "sculpture"
+    },
+    {
+      "color": [ 0, 153, 255],
+      "shape": "rectangle",
+      "title": "hood;exhaust;hood"
+    },
+    {
+      "color": [ 0, 41, 255],
+      "shape": "rectangle",
+      "title": "sconce"
+    },
+    {
+      "color": [ 0, 255, 204],
+      "shape": "rectangle",
+      "title": "vase"
+    },
+    {
+      "color": [ 41, 0, 255],
+      "shape": "rectangle",
+      "title": "traffic;light;traffic;signal;stoplight"
+    },
+    {
+      "color": [ 41, 255, 0],
+      "shape": "rectangle",
+      "title": "tray"
+    },
+    {
+      "color": [173, 0, 255],
+      "shape": "rectangle",
+      "title": "ashcan;trash;can;garbage;can;wastebin;ash;bin;ash-bin;ashbin;dustbin;trash;barrel;trash;bin"
+    },
+    {
+      "color": [ 0, 245, 255],
+      "shape": "rectangle",
+      "title": "fan"
+    },
+    {
+      "color": [ 71, 0, 255],
+      "shape": "rectangle",
+      "title": "pier;wharf;wharfage;dock"
+    },
+    {
+      "color": [122, 0, 255],
+      "shape": "rectangle",
+      "title": "crt;screen"
+    },
+    {
+      "color": [ 0, 255, 184],
+      "shape": "rectangle",
+      "title": "plate"
+    },
+    {
+      "color": [ 0, 92, 255],
+      "shape": "rectangle",
+      "title": "monitor;monitoring;device"
+    },
+    {
+      "color": [184, 255, 0],
+      "shape": "rectangle",
+      "title": "bulletin;board;notice;board"
+    },
+    {
+      "color": [ 0, 133, 255],
+      "shape": "rectangle",
+      "title": "shower"
+    },
+    {
+      "color": [255, 214, 0],
+      "shape": "rectangle",
+      "title": "radiator"
+    },
+    {
+      "color": [ 25, 194, 194],
+      "shape": "rectangle",
+      "title": "glass;drinking;glass"
+    },
+    {
+      "color": [102, 255, 0],
+      "shape": "rectangle",
+      "title": "clock"
+    },
+    {
+      "color": [ 92, 0, 255],
+      "shape": "rectangle",
+      "title": "flag"
+    }
+  ],
+  "class_title_to_idx": {
+    "wall": 0,
+    "building;edifice": 1,
+    "sky": 2,
+    "floor;flooring": 3,
+    "tree": 4,
+    "ceiling": 5,
+    "road;route": 6,
+    "bed": 7,
+    "windowpane;window": 8,
+    "grass": 9,
+    "cabinet": 10,
+    "sidewalk;pavement": 11,
+    "person;individual;someone;somebody;mortal;soul": 12,
+    "earth;ground": 13,
+    "door;double;door": 14,
+    "table": 15,
+    "mountain;mount": 16,
+    "plant;flora;plant;life": 17,
+    "curtain;drape;drapery;mantle;pall": 18,
+    "chair": 19,
+    "car;auto;automobile;machine;motorcar": 20,
+    "water": 21,
+    "painting;picture": 22,
+    "sofa;couch;lounge": 23,
+    "shelf": 24,
+    "house": 25,
+    "sea": 26,
+    "mirror": 27,
+    "rug;carpet;carpeting": 28,
+    "field": 29,
+    "armchair": 30,
+    "seat": 31,
+    "fence;fencing": 32,
+    "desk": 33,
+    "rock;stone": 34,
+    "wardrobe;closet;press": 35,
+    "lamp": 36,
+    "bathtub;bathing;tub;bath;tub": 37,
+    "railing;rail": 38,
+    "cushion": 39,
+    "base;pedestal;stand": 40,
+    "box": 41,
+    "column;pillar": 42,
+    "signboard;sign": 43,
+    "chest;of;drawers;chest;bureau;dresser": 44,
+    "counter": 45,
+    "sand": 46,
+    "sink": 47,
+    "skyscraper": 48,
+    "fireplace;hearth;open;fireplace": 49,
+    "refrigerator;icebox": 50,
+    "grandstand;covered;stand": 51,
+    "path": 52,
+    "stairs;steps": 53,
+    "runway": 54,
+    "case;display;case;showcase;vitrine": 55,
+    "pool;table;billiard;table;snooker;table": 56,
+    "pillow": 57,
+    "screen;door;screen": 58,
+    "stairway;staircase": 59,
+    "river": 60,
+    "bridge;span": 61,
+    "bookcase": 62,
+    "blind;screen": 63,
+    "coffee;table;cocktail;table": 64,
+    "toilet;can;commode;crapper;pot;potty;stool;throne": 65,
+    "flower": 66,
+    "book": 67,
+    "hill": 68,
+    "bench": 69,
+    "countertop": 70,
+    "stove;kitchen;stove;range;kitchen;range;cooking;stove": 71,
+    "palm;palm;tree": 72,
+    "kitchen;island": 73,
+    "computer;computing;machine;computing;device;data;processor;electronic;computer;information;processing;system": 74,
+    "swivel;chair": 75,
+    "boat": 76,
+    "bar": 77,
+    "arcade;machine": 78,
+    "hovel;hut;hutch;shack;shanty": 79,
+    "bus;autobus;coach;charabanc;double-decker;jitney;motorbus;motorcoach;omnibus;passenger;vehicle": 80,
+    "towel": 81,
+    "light;light;source": 82,
+    "truck;motortruck": 83,
+    "tower": 84,
+    "chandelier;pendant;pendent": 85,
+    "awning;sunshade;sunblind": 86,
+    "streetlight;street;lamp": 87,
+    "booth;cubicle;stall;kiosk": 88,
+    "television;television;receiver;television;set;tv;tv;set;idiot;box;boob;tube;telly;goggle;box": 89,
+    "airplane;aeroplane;plane": 90,
+    "dirt;track": 91,
+    "apparel;wearing;apparel;dress;clothes": 92,
+    "pole": 93,
+    "land;ground;soil": 94,
+    "bannister;banister;balustrade;balusters;handrail": 95,
+    "escalator;moving;staircase;moving;stairway": 96,
+    "ottoman;pouf;pouffe;puff;hassock": 97,
+    "bottle": 98,
+    "buffet;counter;sideboard": 99,
+    "poster;posting;placard;notice;bill;card": 100,
+    "stage": 101,
+    "van": 102,
+    "ship": 103,
+    "fountain": 104,
+    "conveyer;belt;conveyor;belt;conveyer;conveyor;transporter": 105,
+    "canopy": 106,
+    "washer;automatic;washer;washing;machine": 107,
+    "plaything;toy": 108,
+    "swimming;pool;swimming;bath;natatorium": 109,
+    "stool": 110,
+    "barrel;cask": 111,
+    "basket;handbasket": 112,
+    "waterfall;falls": 113,
+    "tent;collapsible;shelter": 114,
+    "bag": 115,
+    "minibike;motorbike": 116,
+    "cradle": 117,
+    "oven": 118,
+    "ball": 119,
+    "food;solid;food": 120,
+    "step;stair": 121,
+    "tank;storage;tank": 122,
+    "trade;name;brand;name;brand;marque": 123,
+    "microwave;microwave;oven": 124,
+    "pot;flowerpot": 125,
+    "animal;animate;being;beast;brute;creature;fauna": 126,
+    "bicycle;bike;wheel;cycle": 127,
+    "lake": 128,
+    "dishwasher;dish;washer;dishwashing;machine": 129,
+    "screen;silver;screen;projection;screen": 130,
+    "blanket;cover": 131,
+    "sculpture": 132,
+    "hood;exhaust;hood": 133,
+    "sconce": 134,
+    "vase": 135,
+    "traffic;light;traffic;signal;stoplight": 136,
+    "tray": 137,
+    "ashcan;trash;can;garbage;can;wastebin;ash;bin;ash-bin;ashbin;dustbin;trash;barrel;trash;bin": 138,
+    "fan": 139,
+    "pier;wharf;wharfage;dock": 140,
+    "crt;screen": 141,
+    "plate": 142,
+    "monitor;monitoring;device": 143,
+    "bulletin;board;notice;board": 144,
+    "shower": 145,
+    "radiator": 146,
+    "glass;drinking;glass": 147,
+    "clock": 148,
+    "flag": 149
+  }
+}
