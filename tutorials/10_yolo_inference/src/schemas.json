@@ -160,6 +160,21 @@
             "type": "object",
             "additionalProperties": false,
             "required": [
+              "source"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "full_image"
+                ]
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
               "source",
               "bounds",
               "save",
@@ -169,39 +184,108 @@
               "source": {
                 "type": "string",
                 "enum": [
-                  "full_image",
                   "roi"
                 ]
               },
               "bounds": {
-                "type": "object",
-                "required": [
-                  "left",
-                  "top",
-                  "right",
-                  "bottom"
-                ],
-                "properties": {
-                  "left":{
-                    "type": "string"
-                  },
-                  "top":{
-                    "type": "string"
-                  },
-                  "right":{
-                    "type": "string"
-                  },
-                  "bottom":{
-                    "type": "string"
+                  "type": "object",
+                  "required": [
+                    "left",
+                    "top",
+                    "right",
+                    "bottom"
+                  ],
+                  "properties": {
+                    "left":{
+                      "type": "string"
+                    },
+                    "top":{
+                      "type": "string"
+                    },
+                    "right":{
+                      "type": "string"
+                    },
+                    "bottom":{
+                      "type": "string"
+                    }
                   }
+                },
+                "save": {
+                  "type": "string"
+                },
+                "class_name": {
+                  "type": "string"
                 }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "source",
+              "nms_after",
+              "window",
+              "min_overlap",
+              "save"
+            ],
+            "properties": {
+              "source": {
+                "type": "string",
+                "enum": [
+                  "sliding_window_det"
+                ]
               },
-              "save": {
-                "type": "string"
-              },
-              "class_name": {
-                "type": "string"
-              }
+                "nms_after": {
+                  "type": "object",
+                  "required": [
+                    "enable",
+                    "iou_threshold"
+                  ],
+                  "properties": {
+                    "enable":{
+                      "type": "boolean"
+                    },
+                    "iou_threshold":{
+                      "type": "number"
+                    }
+                  }
+                },
+              "window": {
+                  "type": "object",
+                  "required": [
+                    "width",
+                    "height"
+                  ],
+                  "properties": {
+                    "width":{
+                      "type": "integer"
+                    },
+                    "height":{
+                      "height": "integer"
+                    }
+                  }
+                },
+              "min_overlap": {
+                  "type": "object",
+                  "required": [
+                    "x",
+                    "y"
+                  ],
+                  "properties": {
+                    "x":{
+                      "type": "integer"
+                    },
+                    "y":{
+                      "height": "integer"
+                    }
+                  }
+                },
+                "save": {
+                  "type": "boolean"
+                },
+                "class_name": {
+                  "type": "string"
+                }
             }
           }
         ]

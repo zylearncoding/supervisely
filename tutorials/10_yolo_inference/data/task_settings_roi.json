@@ -1,0 +1,22 @@
+{
+  "gpu_devices": [0],
+  "model_classes": {
+      "save_classes": "__all__",
+      "add_suffix": "_yolo"
+  },
+  "existing_objects": {
+      "save_classes": [],
+      "add_suffix": ""
+  },
+  "mode": {
+      "source": "roi",
+      "bounds": {
+            "left": "10%",
+            "top": "0%",
+            "right": "5%",
+            "bottom": "0%"
+        },
+        "save": "False",
+        "class_name": "inference_roi"
+  }
+}

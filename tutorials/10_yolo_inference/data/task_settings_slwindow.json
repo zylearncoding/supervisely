@@ -1,0 +1,30 @@
+{
+  "gpu_devices": [
+    0
+  ],
+  "model_classes": {
+    "save_classes": "__all__",
+    "add_suffix": "_yoloy"
+  },
+  "existing_objects": {
+    "save_classes": [],
+    "add_suffix": ""
+  },
+  "mode": {
+    "source": "sliding_window_det",
+    "nms_after":{
+      "enable": false,
+      "iou_threshold": 0.5
+    },
+    "window": {
+      "width": 500,
+      "height": 500
+    },
+    "min_overlap": {
+      "x": 50,
+      "y": 50
+    },
+    "save": true,
+    "class_name": "inference_slwindow"
+  }
+}

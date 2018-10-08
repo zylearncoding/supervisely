@@ -113,7 +113,7 @@ class InfFeederRoi:
             raise RuntimeError('Mode "roi": result crop bounds are invalid.')
 
         img_cropped = crop_image_with_rect(img, roi)
-        found_objects = inference_cback(img_cropped, None)  # no need to crop & pass figures now
+        found_objects = inference_cback(img_cropped, ann)  # no need to crop & pass figures now
         for fig in found_objects:
             fig.shift((roi.left, roi.top))  # and no need to normalize
 
@@ -331,7 +331,7 @@ class InfFeederSlWindowDetection:
         found_objects = []
         for roi in self.sliding_windows.get(img_wh):
             img_cropped = crop_image_with_rect(img, roi)
-            figures_from_window = inference_cback(img_cropped, None)
+            figures_from_window = inference_cback(img_cropped, ann)
             for fig in figures_from_window:
                 fig.shift((roi.left, roi.top))  # and no need to normalize
             found_objects.extend(figures_from_window)
