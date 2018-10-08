@@ -116,7 +116,7 @@ class YOLOApplier:
         logger.info('Model is ready to inference.')
 
     def _infer_on_img(self, img, ann):
-        res_detections = detect(self.net, len(self.train_names), img.encode('utf-8'), thresh=self.score_thresh)
+        res_detections = detect(self.net, len(self.train_names), img, thresh=self.score_thresh)
         res_figures = yolo_preds_to_sly_rects(res_detections, ann.image_size_wh, self.train_names)
         return res_figures
 

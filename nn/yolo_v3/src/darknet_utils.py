@@ -2,6 +2,8 @@ from ctypes import *
 import math
 import random
 
+import numpy as np
+
 
 def sample(probs):
     s = sum(probs)
@@ -119,6 +121,10 @@ predict_image = lib.network_predict_image
 predict_image.argtypes = [c_void_p, IMAGE]
 predict_image.restype = POINTER(c_float)
 
+ndarray_image = lib.ndarray_to_image
+ndarray_image.argtypes = [POINTER(c_ubyte), POINTER(c_long), POINTER(c_long)]
+ndarray_image.restype = IMAGE
+
 
 def classify(net, meta, im):
     out = predict_image(net, im)
@@ -129,8 +135,10 @@ def classify(net, meta, im):
     return res
 
 
-def detect(net, num_classes, image, thresh=.5, hier_thresh=.5, nms=.45):
-    im = load_image(image, 0, 0)
+def detect(net, num_classes, img, thresh=.5, hier_thresh=.5, nms=.45):
+    #im = load_image(image, 0, 0)
+    data = img.ctypes.data_as(POINTER(c_ubyte))
+    im = ndarray_image(data, img.ctypes.shape, img.ctypes.strides)
     num = c_int(0)
     pnum = pointer(num)
     predict_image(net, im)
