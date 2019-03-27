@@ -1,0 +1,5 @@
+{
+	"title": "Confusion_Matrix",
+	"description": "Takes 2 (or 1) projects as input and calculates Confusion_Matrix for classes included in classes_mapping",
+	"type": "custom"
+}

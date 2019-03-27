@@ -1,0 +1,25 @@
+[
+  {
+    "title": "mIoU-2-projects",
+    "type": "custom",
+    "config": {
+      "project_gt": "pr1_title",
+      "project_pred": "pr2_title",
+      "classes_mapping": {
+        "class_0": "class_0_pred",
+        "class_1": "class_1_pred"
+      }
+    }
+  },
+  {
+    "title": "mIoU-1-project",
+    "type": "custom",
+    "config": {
+      "project_gt": "pr1_title",
+      "classes_mapping": {
+        "class_0": "class_0_pred",
+        "class_1": "class_1_pred"
+      }
+    }
+  }
+]

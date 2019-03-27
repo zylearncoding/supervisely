@@ -1,0 +1,5 @@
+{
+	"title": "DICOM",
+	"description": "Import one or several dicom files with metainformation",
+	"type": "import"
+}

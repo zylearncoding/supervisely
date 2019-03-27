@@ -1,0 +1,5 @@
+{
+	"title": "DeepLab v3 Plus",
+	"description": "State of the art NN for multi-class semantic segmentation.",
+	"type": "architecture"
+}

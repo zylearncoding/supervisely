@@ -1,0 +1,5 @@
+{
+	"title": "ICNet",
+	"description": "Lightweight NN architecture for multi-class semantic segmentation. It is fast to train and produces good results even with less training data.",
+	"type": "architecture"
+}

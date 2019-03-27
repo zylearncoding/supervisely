@@ -1,0 +1,5 @@
+{
+	"title": "Binary masks",
+	"description": "Drag and drop two directories: 'img' - with images, 'ann' - ann with binary masks",
+	"type": "import"
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "title": "settings",
+    "type": "import",
+    "config": {
+      "tags": [
+        "Manufacturer",
+        "ManufacturerModelName",
+        "Modality"
+      ]
+    }
+  }
+]

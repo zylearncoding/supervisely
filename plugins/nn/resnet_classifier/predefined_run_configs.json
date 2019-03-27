@@ -1,0 +1,106 @@
+[
+  {
+    "title": "train",
+    "type": "train",
+    "config": {
+      "lr": 0.0001,
+      "epochs": 25,
+      "val_every": 2,
+      "batch_size": {
+        "val": 8,
+        "train": 8
+      },
+      "input_size": {
+        "width": 224,
+        "height": 224
+      },
+      "num_layers": 18,
+      "gpu_devices": [
+        0
+      ],
+      "ignore_tags": [],
+      "data_workers": {
+        "val": 2,
+        "train": 2
+      },
+      "dataset_tags": {
+        "val": "val",
+        "train": "train"
+      },
+      "lr_decreasing": {
+        "patience": 25,
+        "lr_divisor": 10
+      },
+      "weights_init_type": "transfer_learning",
+      "allow_corrupted_samples": {
+        "val": 0,
+        "train": 0
+      }
+    }
+  },
+  {
+    "title": "full_image",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0
+      },
+      "mode": {
+        "name": "full_image",
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_resnet"
+        }
+      }
+    }
+  },
+  {
+    "title": "objects_boxes",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0
+      },
+      "mode": {
+        "name": "bboxes_classifier",
+        "save": false,
+        "padding": {
+          "top": "0px",
+          "left": "0px",
+          "right": "0px",
+          "bottom": "0px"
+        },
+        "add_suffix": "_input_bbox",
+        "from_classes": "__all__",
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_resnet"
+        }
+      }
+    }
+  },
+  {
+    "title": "roi",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0
+      },
+      "mode": {
+        "name": "roi",
+        "bounds": {
+            "left": "10%",
+            "top": "30%",
+            "right": "10%",
+            "bottom": "10%"
+        },
+        "save": false,
+        "class_name": "inference_roi",
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_resnet"
+        }
+      }
+    }
+  }
+]

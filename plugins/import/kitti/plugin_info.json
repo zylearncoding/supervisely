@@ -1,0 +1,5 @@
+{
+	"title": "KITTI",
+	"description": "Import 'training' folder from KITTY Semantic Segmentation dataset",
+	"type": "import"
+}

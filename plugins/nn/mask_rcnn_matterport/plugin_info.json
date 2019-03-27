@@ -1,0 +1,5 @@
+{
+	"title": "Mask R-CNN (Keras + TF)",
+	"description": "Keras+Tensorflow implementation of Mask R-CNN",
+	"type": "architecture"
+}

@@ -1,0 +1,5 @@
+{
+	"title": "Cityscapes",
+	"description": "Drag and drop two directories: 'gtFine' and 'leftImg8bit'",
+	"type": "import"
+}

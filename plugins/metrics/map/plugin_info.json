@@ -1,0 +1,5 @@
+{
+	"title": "Mean Average Precision",
+	"description": "Takes 2 (or 1) projects as input, for each pair of classes calculates Average Precision and calculates mAP for all defined classes at a given Intersection over Union (IoU) threshold",
+	"type": "custom"
+}

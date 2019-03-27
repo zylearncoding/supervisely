@@ -1,0 +1,129 @@
+[
+  {
+    "title": "train",
+    "type": "train",
+    "config": {
+      "lr": 0.0001,
+      "epochs": 3,
+      "val_every": 0.5,
+      "batch_size": {
+        "val": 4,
+        "train": 4
+      },
+      "input_size": {
+        "width": 2049,
+        "height": 1025
+      },
+      "gpu_devices": [
+        0
+      ],
+      "data_workers": {
+        "val": 1,
+        "train": 1
+      },
+      "dataset_tags": {
+        "val": "val",
+        "train": "train"
+      },
+      "lr_decreasing": {
+        "patience": 1000,
+        "lr_divisor": 5
+      },
+      "special_classes": {
+        "neutral": "neutral"
+      },
+      "weights_init_type": "transfer_learning"
+    }
+  },
+  {
+    "title": "full_image",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0
+      },
+      "mode": {
+        "name": "full_image",
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_icnet"
+        }
+      }
+    }
+  },
+  {
+    "title": "roi",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0
+      },
+      "mode": {
+        "name": "roi",
+        "bounds": {
+          "left": "10%",
+          "top": "30%",
+          "right": "10%",
+          "bottom": "10%"
+        },
+        "save": false,
+        "class_name": "inference_roi",
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_icnet"
+        }
+      }
+    }
+  },
+  {
+    "title": "objects",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0
+      },
+      "mode": {
+        "name": "bboxes",
+        "from_classes": "__all__",
+        "padding": {
+          "left": "10px",
+          "top": "10px",
+          "right": "10px",
+          "bottom": "10px"
+        },
+        "save": false,
+        "add_suffix": "_input_bbox",
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_icnet"
+        }
+      }
+    }
+  },
+  {
+    "title": "sliding_window",
+    "type": "inference",
+    "config": {
+      "model": {
+        "gpu_device": 0
+      },
+      "mode": {
+        "name": "sliding_window",
+        "window": {
+          "width": 128,
+          "height": 128
+        },
+        "min_overlap": {
+          "x": 10,
+          "y": 10
+        },
+        "save": false,
+        "class_name": "sl_window",
+        "model_classes": {
+          "save_classes": "__all__",
+          "add_suffix": "_icnet"
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,5 @@
+{
+	"title": "Pascal VOC",
+	"description": "To upload Pascal VOC Semnatic Segmentation dataset",
+	"type": "import"
+}

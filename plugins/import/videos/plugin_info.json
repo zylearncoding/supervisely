@@ -1,0 +1,5 @@
+{
+	"title": "Video",
+	"description": "For each video will be created separate dataset. Frames are extracted with specific step.",
+	"type": "import"
+}

@@ -1,0 +1,5 @@
+{
+	"title": "mIoU",
+	"description": "Takes 2 (or 1) projects as input, for each pair of classes calculates IoU and calculates mIoU for all defined classes",
+	"type": "custom"
+}

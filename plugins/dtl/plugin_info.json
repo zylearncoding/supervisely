@@ -1,0 +1,5 @@
+{
+	"title": "DTL",
+	"description": "Allows to combine datasets, to make class mapping, filter objects and images, apply auto augmentations and so on ...",
+	"type": "dtl"
+}

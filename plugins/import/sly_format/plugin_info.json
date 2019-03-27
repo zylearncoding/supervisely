@@ -1,0 +1,5 @@
+{
+	"title": "Supervisely",
+	"description": "Supported formats: directory with entire Supervisely project, or meta.json + selected dataset folders.",
+	"type": "import"
+}
