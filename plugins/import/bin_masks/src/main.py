@@ -49,8 +49,7 @@ def read_mask_labels(mask_path: str, classes_mapping: Dict, obj_classes: sly.Obj
         if bool_mask.sum() == 0:
             continue
 
-        origin = sly.Point(0, 0)
-        bitmap = sly.Bitmap(origin=origin, data=bool_mask)
+        bitmap = sly.Bitmap(data=bool_mask)
         obj_class = obj_classes.get(cls_name)
         labels_list.append(sly.Label(geometry=bitmap, obj_class=obj_class))
     return labels_list

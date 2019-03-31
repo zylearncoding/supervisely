@@ -53,7 +53,7 @@ def get_ann(img_path, inst_path):
             class_name, cl_mask = temp
             mask = cl_mask.astype(np.bool)
             new_color = default_classes_colors[class_name]
-            bitmap = sly.Bitmap(origin=sly.Point(0, 0), data=mask)
+            bitmap = sly.Bitmap(data=mask)
 
             if not classes_dict.has_key(class_name):
                 obj_class = sly.ObjClass(name=class_name, geometry_type=sly.Bitmap, color=new_color)

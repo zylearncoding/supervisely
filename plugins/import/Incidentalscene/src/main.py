@@ -40,7 +40,7 @@ def get_ann(img_path, inst_path):
                 except ValueError:
                     line[0] = line[0][1:]
                     line = list(map(lambda i: int(i), line))
-                points = [sly.Point(line[i + 1], line[i]) for i in range(0, 8, 2)]
+                points = [sly.PointLocation(line[i + 1], line[i]) for i in range(0, 8, 2)]
                 polygon = sly.Polygon(exterior=points, interior=[])
 
                 if not classes_dict.has_key(class_name):

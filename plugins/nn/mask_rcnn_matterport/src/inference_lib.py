@@ -6,7 +6,6 @@ import custom_config
 import model as modellib
 from supervisely_lib.annotation.label import Label
 from supervisely_lib.annotation.tag import Tag
-from supervisely_lib.geometry.point import Point
 from supervisely_lib.geometry.bitmap import Bitmap
 
 
@@ -35,7 +34,7 @@ def infer_on_image(image, graph, model, idx_to_class_title, project_meta, confid
     for mask_idx, class_id in enumerate(results['class_ids']):
         bool_mask = results['masks'][:, :, mask_idx] != 0
         confidence = results['scores'][mask_idx]
-        class_geometry = Bitmap(Point(0, 0), data=bool_mask)
+        class_geometry = Bitmap(data=bool_mask)
         cls_title = idx_to_class_title[class_id]
         label = Label(geometry=class_geometry, obj_class=project_meta.get_obj_class(cls_title))
 

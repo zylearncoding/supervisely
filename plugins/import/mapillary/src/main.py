@@ -81,7 +81,7 @@ class ImporterMapillary:
 
             for color, class_name in curr_col2cls.items():
                 mask = instance_img == color  # exact match for 1d uint16
-                bitmap = sly.Bitmap(sly.Point(0, 0), data=mask)
+                bitmap = sly.Bitmap(data=mask)
                 obj_class = sly.ObjClass(name=class_name, geometry_type=sly.Bitmap,
                                          color=self.cls2col.get(class_name, sly.color.random_rgb()))
 

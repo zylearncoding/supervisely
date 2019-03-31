@@ -60,7 +60,7 @@ def process(img, ann):
     crops = []
     for cur_img, cur_ann in [original, flipped]:
         for i in range(image_multiplier):
-            res_img, res_ann = sly.aug.random_crop_percent(cur_img, cur_ann, (70, 90), (70, 90))
+            res_img, res_ann = sly.aug.random_crop_fraction(cur_img, cur_ann, (70, 90), (70, 90))
             crops.append((res_img, res_ann))
 
     results = []

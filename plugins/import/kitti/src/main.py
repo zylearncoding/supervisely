@@ -73,7 +73,7 @@ def generate_annotation(src_img_path, inst_path, id_to_class, class_to_color, cl
 
         for color, class_name in current_color_to_class.items():
             mask = instance_img == color  # exact match for 1d uint16
-            bitmap = sly.Bitmap(sly.Point(0, 0), mask)
+            bitmap = sly.Bitmap(mask)
 
             if class_name not in classes_dict:
                 obj_class = sly.ObjClass(name=class_name, geometry_type=sly.Bitmap,

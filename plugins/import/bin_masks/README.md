@@ -5,39 +5,53 @@ This plugin allows you to upload images with annotations in the format of PNG ma
 #### Example 1.
 ```json
 {
-	"Cat": 1,
-	"Dog": 2,
-	"Car": 3
+  "classes_mapping": {
+    "Lemon": 170,
+    "Kiwi": 85
+  }
 }
 ```
-In this example all pixels in the mask which value **equal to 1** will be combined in one Bitmap figure and will be assigned to the class "Cat", equal to 2 will be assigned to the class "Dog" and equal to 3 will be assigned to the class 3 respectively.
+In this configuration example all pixels in the mask which value **equal to 170** will be combined in one Bitmap figure and will be assigned to the class **"Lemon"** and **equal to 85** will be assigned to the class **"Kiwi"**.
+
+![](https://i.imgur.com/a5cVpAB.png)
+
+##### Result:
+![](https://i.imgur.com/s2MWqFF.png)
+
 
 #### Example 2.
 ```json
 {
-	"Pets": [1, 2],
-	"Car": 3
+  "classes_mapping": {
+    "Fruits": [85, 2],
+    "Car": 3
+  }
 }
 ```
-In this case all pixels in the mask which value **equal to 1 or 2** will be combined in one Bitmap figure and will be assigned to the class "Pets" and all pixels equal to 3 will be assinged to the class 3 respectively.
+In this case all pixels in the mask which value **equal to 85 or 170** will be combined in one Bitmap figure and will be assigned to the class **"Fruits"** and all pixels **equal to 3** will be assinged to the class **"Car"**.
 
 #### Example 3.
 ```json
 {
-	"objects": "__all__",
+  "classes_mapping": {
+    "objects": "__all__"
+  }
 }
 ```
-In this case all pixels in the mask which value **greater than 0** will be combined in one Bitmap figure and will be assigned to the class "objects".
+In this case all pixels in the mask which value **greater than 0** will be combined in one Bitmap figure and will be assigned to the class "objects":
 
+![](https://i.imgur.com/fCL4lSN.png)
 
 Also you don't have to specify any configs, in this case default config will be used:
 ```json
 {
-	"untitled": "__all__",
+  "classes_mapping": {
+    "untitled": "__all__"
+  }
 }
 ```
 
-Images should be in the folder "img" and mask should be in the folder "ann" and should have the same name as the images(but may have a different extension). All images will be  placed in dataset **ds**.
+Images should be in the folder `"img"` and mask should be in the folder `"ann"` and should have the same name as the images(but may have a different extension). All images will be  placed in dataset **ds**.
 
 File structure that can be uploaded by this plugin should look like this:
 ```

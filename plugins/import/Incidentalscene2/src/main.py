@@ -59,7 +59,7 @@ def get_ann(img_path, coords, words):
     color = [255, 0, 0]
     name = img_path.split('/')[-1]
     line = coords[name]
-    points = [sly.Point(line[i + 1], line[i]) for i in range(0, 8, 2)]
+    points = [sly.PointLocation(line[i + 1], line[i]) for i in range(0, 8, 2)]
     polygon = sly.Polygon(exterior=points, interior=[])
     if not classes_dict.has_key(class_name):
         obj_class = sly.ObjClass(name=class_name, geometry_type=sly.Polygon, color=color)

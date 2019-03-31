@@ -112,7 +112,7 @@ class ImporterPascalVOCSegm:
         for color, class_name in curr_col2cls.items():
             mask = np.all(colored_img == color, axis=2)  # exact match (3-channel img & rgb color)
 
-            bitmap = sly.Bitmap(origin=sly.Point(0, 0), data=mask)
+            bitmap = sly.Bitmap(data=mask)
             obj_class = sly.ObjClass(name=class_name, geometry_type=sly.Bitmap, color=color)
 
             if not self.obj_classes.has_key(class_name):

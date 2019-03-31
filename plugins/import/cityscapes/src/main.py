@@ -25,7 +25,8 @@ class ImporterCityscapes:
 
     @staticmethod
     def convert_points(simple_points):
-        return [sly.Point(int(p[1]), int(p[0])) for p in simple_points]
+        # TODO: Maybe use row_col_list_to_points here?
+        return [sly.PointLocation(int(p[1]), int(p[0])) for p in simple_points]
 
     def _load_cityscapes_annotation(self, orig_img_path, orig_ann_path) -> sly.Annotation:
         json_data = json.load(open(orig_ann_path))

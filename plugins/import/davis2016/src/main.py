@@ -38,7 +38,7 @@ def get_ann(img_path, inst_path):
     mask_background = (img_gray == 0)
     class_name = 'background'
     color = [1, 1, 1]
-    bitmap = sly.Bitmap(origin=sly.Point(0, 0), data=mask_background)
+    bitmap = sly.Bitmap(data=mask_background)
     if not classes_dict.has_key(class_name):
         obj_class = sly.ObjClass(name=class_name, geometry_type=sly.Bitmap, color=color)
         classes_dict = classes_dict.add(obj_class)
@@ -47,7 +47,7 @@ def get_ann(img_path, inst_path):
     if np.any(mask_foreground):
         class_name = 'object'
         color = [255, 255, 255]
-        bitmap = sly.Bitmap(origin=sly.Point(0, 0), data=mask_foreground)
+        bitmap = sly.Bitmap(data=mask_foreground)
         if not classes_dict.has_key(class_name):
             obj_class = sly.ObjClass(name=class_name, geometry_type=sly.Bitmap, color=color)
             classes_dict = classes_dict.add(obj_class)

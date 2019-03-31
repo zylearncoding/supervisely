@@ -81,8 +81,9 @@ class Net:
         return new_name
 
     def may_require_images(self):
-        req_layers = [layer for layer in self.layers if layer.requires_image()]
-        return len(req_layers) > 0
+        # req_layers = [layer for layer in self.layers if layer.requires_image()]
+        # return len(req_layers) > 0
+        return True
 
     def check_connections(self, indx=-1):
         if indx == -1:

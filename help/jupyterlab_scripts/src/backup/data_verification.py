@@ -5,7 +5,6 @@ from supervisely_lib.annotation.annotation import Annotation
 from supervisely_lib.annotation.label import Label
 from supervisely_lib.annotation.tag import Tag
 from supervisely_lib.geometry.bitmap import Bitmap
-from supervisely_lib.geometry.point import Point
 from supervisely_lib.project.project_meta import ProjectMeta
 
 
@@ -71,14 +70,14 @@ def verify_data(orig_ann: Annotation, classes_matching: dict, res_project_meta: 
         fp_mask = _create_fp_mask(mask1, mask2)
         if fp_mask.sum() != 0:
             fp_object_cls = res_project_meta.obj_classes.get(make_false_positive_name(first_class))
-            fp_geom = Bitmap(Point(0, 0), fp_mask)
+            fp_geom = Bitmap(data=fp_mask)
             fp_label = Label(fp_geom, fp_object_cls)
             ann.add_label(fp_label)
 
         fn_mask = _create_fn_mask(mask1, mask2)
         if fn_mask.sum() != 0:
             fn_object_cls = res_project_meta.obj_classes.get(make_false_negative_name(first_class))
-            fn_geom = Bitmap(Point(0, 0), fn_mask)
+            fn_geom = Bitmap(data=fn_mask)
             fn_label = Label(fn_geom, fn_object_cls)
             ann.add_label(fn_label)
     return ann

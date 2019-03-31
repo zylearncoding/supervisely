@@ -45,7 +45,7 @@ def get_ann(img_path, inst_path, default_classes_colors, default_colors_classes)
 
     for color, class_name in curr_color_to_class.items():
         mask = np.all(colored_img == color, axis=2)
-        bitmap = sly.Bitmap(origin=sly.Point(0, 0), data=mask)
+        bitmap = sly.Bitmap(data=mask)
         if not classes_dict.has_key(class_name):
             obj_class = sly.ObjClass(name=class_name, geometry_type=sly.Bitmap, color=list(color))
             classes_dict = classes_dict.add(obj_class)  # make it for meta.json

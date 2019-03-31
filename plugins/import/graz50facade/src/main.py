@@ -38,7 +38,7 @@ def get_ann(img_path, inst_path, default_classes_colors):
             mask_temp = np.zeros(mask.shape, dtype=np.uint8)
             cv2.fillPoly(mask_temp, [arr], (254, 254, 254))
             mask = mask_temp.astype(np.bool)
-            bitmap = sly.Bitmap(origin=sly.Point(0, 0), data=mask)
+            bitmap = sly.Bitmap(data=mask)
             if not classes_dict.has_key(class_name):
                 obj_class = sly.ObjClass(name=class_name, geometry_type=sly.Bitmap, color = list(color))
                 classes_dict = classes_dict.add(obj_class)
