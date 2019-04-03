@@ -7,6 +7,7 @@ import json
 import cv2
 import numpy as np
 import supervisely_lib as sly
+from supervisely_lib.io.json import load_json_file
 
 COLORS_FILE_NAME = 'colors.json'
 ELEMENT_NAME = 'name'
@@ -42,7 +43,7 @@ def read_colors():
         labels = json.load(open(default_filepath))
 
     instance_classes = [el[ELEMENT_NAME] for el in labels if el['hasInstances']]
-    class_to_color = {el[ELEMENT_NAME]: tuple(el['color']) for el in labels}
+    class_to_color = {el[ELEMENT_NAME]: list(el['color']) for el in labels}
     id_to_class = {el[ELEMENT_ID]: el[ELEMENT_NAME] for el in labels}
     sly.logger.info('Determined {} class(es).'.format(len(class_to_color)),
                     extra={'classes': list(class_to_color.keys())})
@@ -61,7 +62,7 @@ def read_datasets():
     return src_datasets
 
 
-def generate_annotation(src_img_path, inst_path, id_to_class, class_to_color, classes_dict):
+def generate_annotation(src_img_path, inst_path, id_to_class, class_to_color, classes_collection):
     ann = sly.Annotation.from_img_path(src_img_path)
 
     if os.path.isfile(inst_path):
@@ -75,24 +76,24 @@ def generate_annotation(src_img_path, inst_path, id_to_class, class_to_color, cl
             mask = instance_img == color  # exact match for 1d uint16
             bitmap = sly.Bitmap(mask)
 
-            if class_name not in classes_dict:
+            if not classes_collection.has_key(class_name):
                 obj_class = sly.ObjClass(name=class_name, geometry_type=sly.Bitmap,
                                          color=class_to_color.get(class_name, sly.color.random_rgb()))
-                classes_dict[class_name] = obj_class
+                classes_collection = classes_collection.add(obj_class)
 
-            ann.add_label(sly.Label(bitmap, classes_dict[class_name]))
+            ann = ann.add_label(sly.Label(bitmap, classes_collection.get(class_name)))
             instance_img[mask] = 0  # to check missing colors, see below
 
         if np.sum(instance_img) > 0:
             sly.logger.warn('Not all objects or classes are captured from source segmentation.', extra={})
-    return ann
+    return ann, classes_collection
 
 
 def convert():
-    settings = json.load(open(sly.TaskPaths.SETTINGS_PATH))
-    out_project = sly.create_project(sly.TaskPaths.RESULTS_DIR, settings['res_names']['project'])
-    classes_dict = sly.ObjClassDict()
-
+    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    out_project = sly.Project(os.path.join(sly.TaskPaths.RESULTS_DIR, settings['res_names']['project']),
+                              sly.OpenMode.CREATE)
+    classes_collection = sly.ObjClassCollection()
     instance_classes, id_to_class, class_to_color = read_colors()
     src_datasets = read_datasets()
 
@@ -107,10 +108,11 @@ def convert():
             try:
                 src_img_path = osp.join(images_dir(ds_name), name)
                 inst_path = osp.join(instances_dir(ds_name), name)
-                ann = generate_annotation(src_img_path, inst_path, id_to_class, class_to_color, classes_dict)
-                img_ann = sly.ImageAnnotation(src_img_path, ann)
+                ann, classes_collection = generate_annotation(src_img_path, inst_path, id_to_class, class_to_color,
+                                                              classes_collection)
                 item_name = osp.splitext(name)[0]
-                out_project.add_item(dataset.name, item_name, img_ann)
+
+                dataset.add_item_file(item_name, src_img_path, ann)
                 samples_count += 1
 
             except Exception as e:
@@ -124,13 +126,11 @@ def convert():
             dataset_progress.iter_done_report()
 
     sly.logger.info('Processed.', extra={'samples': samples_count, 'skipped': skipped_count})
-    out_meta = sly.ProjectMeta(obj_classes=classes_dict)
+    out_meta = sly.ProjectMeta(obj_classes=classes_collection)
     out_project.set_meta(out_meta)
 
 
 def main():
-    from supervisely_lib.io.fs import clean_dir
-    clean_dir(sly.TaskPaths.RESULTS_DIR)
     convert()
     sly.report_import_finished()
 

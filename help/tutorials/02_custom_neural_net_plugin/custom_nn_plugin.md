@@ -1,22 +1,43 @@
 # Integrating a custom neural network with Supervisely
 
 This guide describes the relatively low-level details of implementing a neural
-network plugin for Supervisely. It covers:
-* Expected source code layout for the build system to recognize all components
-  of the plugin properly.
-* Layout of the training data (provided by the agent).
-* Layout of the output (model weights checkpoints for training, annotated
-  projects for inference).
-* Reporting metrics to the Supervisely web instance during training.
+network plugin for Supervisely. Neural networks are somewhat more complex than
+the other [Supervisely plugins](../01_create_new_plugin/how_to_create_plugin.md): in addition to code
+(packed as usual into a
+Docker image), neural networks also need model weights (to run inference or
+serve as a starting point for training a new model) and an output config (this
+determines which semantic classes are predicted using a given set of weights).
 
-Neural network plugins are Docker images, executed by the Supervisely agent.
+So on a high level, here is what you need to do to integrate your custom neural
+network into Supervisely:
+1. Write the code to implement the model logic. The code has to conform to a
+   [specific layout](#code-layout) for the system to recognize your neural
+   network properly.
+2. Package the code into a Docker image and push to a Docker repository as
+   you would do with any other type of plugin. See our tutorial on [adding a
+   generic plugin to Supervisely](../01_create_new_plugin/how_to_create_plugin.md) for details.
+3. Create and upload a set of weights along with a model config to the
+   Supervisely web instance
+
+As with other types of Supervisely plugins, Neural network plugins are Docker
+images, executed by the Supervisely agent.
 When the agent receives a request for training or inference from the web
 instance, it downloads the necessary data, sets up the required directories and
 runs the neural net docker image with data and results directories mounted to
 specific locations. As the NN docker container runs, the agent parses the logs,
 streams training metrics and progress reports back to the web instance.
-After the NN docker container finishes, the agent uploads the finale results
+Finally, the agent uploads the end results
 (again, taken from specific directories) to the web instance.
+
+This guide is relies on the 
+[generic plugin integration guide](../01_create_new_plugin/how_to_create_plugin.md)
+for understanding the basic concepts. We will focus on the following aspects:
+* Expected source code layout for the build system to recognize all components
+  of the plugin properly.
+* Layout of the input and output data compatible with the agent.
+* Reporting metrics to the Supervisely web instance during training.
+* Creating and uploading the initial set of weights (neural net state) to the
+  Supervisely web instance.
 
 ## Code layout
 
@@ -29,26 +50,21 @@ The minimal overall required code layout is as follows:
 ```
 /
 |-- my-custom-nn/      # Directory name does not matter much.
-|   |-- src/          # Must be src
+|   |-- src/           # Must be src
 |   |   |-- train.py      # Training entry point
 |   |   |-- inference.py  # Inference entry point
-|   |-- plugin_info.json  # NN metadata - title, description etc.
+|   |-- plugin_info.json  # Basic metadata - title, description etc.
 |   |-- predefined_run_configs.json  # Default run connfigs to show in web instance
 |   |-- Dockerfile
+|   |-- VERSION        # Docker image naming for the build system.
 |-- supervisely_lib/   # Supervisely SDK so that it is available for Docker build.
 ```
 
-The `plugin_info.json` should have the following format:
+Check out the [generic plugin guide](../01_create_new_plugin/how_to_create_plugin.md)
+for details on `Dockerfile`, `plugin_info.json` and `VERSION` files and how to
+pack these code directories into a Docker image.
 
-```
-{
-  "title": "Custom NN title (shown in the web UI)",
-  "description": "More details of what Custom NN is.",
-  "type": "architecture"   # Must be "architecture" to distinguish from other plugin types
-}
-```
-
-The `predefined_run_configs.json` contains dfault configs that will be exposed
+The `predefined_run_configs.json` contains default configs that will be exposed
 in the web UI. It must be a list of JSON dictionaries of the following format:
 ```
 [
@@ -82,14 +98,11 @@ in the web UI. It must be a list of JSON dictionaries of the following format:
 To start with, it is safe to leave `predefined_run_configs.json` with an empty
 list: `[]`.
 
-See the "How to create Superviely plugin" guide for detailed instructions on how to pack these code directories into a
-Docker image.
-
 ## Training mode
 
 In this mode `train.py` is used as an entry point.
 
-### Directories layout
+### Training mode directories layout
 
 The agent downloads the training data and initial model weights and config and
 mounts them for the neural net plugin as follows:
@@ -116,7 +129,7 @@ Let us go over the directories in more detail:
 * `model` directory contains two components:
   * `model_specific_initial_weights` us a checkpoint, in whatever format your model
     supports, with pretrained weights that are used to initialize the model for
-    training. The name can be anything, this is all deteermined by your plugin
+    training. The name can be anything, this is all determined by your plugin
     code. For example, for PyTorch models we usually use `model.pt` as a weights
     checkpoint file, while for TensorFlow we usually use a 'model_weights'
     directory with several files comprising a TensorFlow checkpoint.
@@ -191,7 +204,7 @@ Let us go over the directories in more detail:
       # - "transfer_learning": reset the head (last layer(s) of the model) to
       #   match the classes of the training dataset. This may involve changing
       #   the dimensions of the head to match the new number of predicted
-      #   classes and should always involve resetting head weights randomly.
+      #   classes and should always involve resetting head  randomly.
       "weights_init_type": "transfer_learning"  # or "continue_training"
     }
     ```
@@ -212,7 +225,8 @@ training metrics back to the web UI.
 To save a checkpoint:
 * Make a new directory in `/sly_task_data/results`.
 * Write to that new directory the model weights and `config.json` as explained
-  above in `model` section of [train directories layout](#directories-layout).
+  above in `model` section of
+  [train directories layout](#training-mode-directories-layout).
 * Tell the agent that a new checkpoint has been saved. This is typically done by
   calling
   ```
@@ -260,9 +274,10 @@ weights for the neural network model using a checkpoint in
 `/sly_task_data/data` and write the resulting project with inference results in
 Supervisely format to `/sly_task_data/results`.
 
-### Directories layout
+### Inference mode directories layout
 
-Input directories layout is the same as in [training mode](#directories-layout).
+Input directories layout is the same as in
+[training mode](#training-mode-directories-layout).
 The only difference is that the `/sly_task_data/results` directory should
 receive not model checkpoints, but a data project in Supervisely format with the
 labels or tags added according to the inference results.
@@ -428,3 +443,97 @@ in however is the most convenient way is nesessary. Nevertheless, we have
 found that splitting up the stages of training setup in the predefined
 methods above helps maintain the structure of the code more easily and
 encourages commonality between different neural network implementations.
+
+## Create and upload model weights
+
+Neural networks need a set of weights both for inference and as a starting point
+for training. It also needs to map the predictions of the model (which
+are typically indices into a tensor) to the semantic named classes.
+
+In Supervisely, this combination of weights and configuration is stored as a
+`.tar` file of the following format:
+```
+model-state.tar
+| -- config.json
+| -- model-specific-weights-file  # e.g. model.pt fo PyTorch
+```
+
+To finish intergrating your model into Supervisely, you will need to create such
+a `.tar` file and upload it to the web instance.
+
+### Creating a model state file
+
+#### Model weights
+
+Within the model state `.tar` file, the model-specific weights file can be named
+arbitrarily and have arbitrary format, as long as your `train.py` and 
+`inference.py` use the same naming and format to read and write the weights.
+
+If you already have a set of weights pre-trained on some dataset, you can use
+those, just don't forget to make a corresponding
+[classes config file](#output-classes-config) with output classes and class
+integer indices consistent with the pre-trained weights.
+
+If you don't have a reasonable set of weights already, you can simply create and
+upload a random set of weights so that your training runs have a starting point.
+
+For example, in PyTorch, assuming your model inherits from the standard
+`torch.nn.Module` class and has a constructor with `num_out_classes` argument
+to set the required number of output classes, you can get a random set 
+weights with 2 classes simply as
+```
+import torch
+
+random_model = MyCustomModel(num_out_classes=2)
+torch.save(random_model.state_dict(), './model.pt')
+```
+
+#### Output classes config
+
+This should be a `config.json` file of the same format as outlined in the
+[training section](#training-mode-directories-layout). 
+
+### Pack and upload the model state
+
+#### Packaging a .tar file
+
+The model weighs and config must be packed into an uncompressed `.tar` file so
+that the config and weights are in the `top level directory` within that `.tar`
+file, *not* within a subdirectory. For example, if you have the files prepared
+in a directory
+```
+my-custom-model-state/
+| -- config.json
+| -- model.pt
+```
+then you can create the required tar file with
+```
+tar -cf my-custom-model-state.tar -C ./my-custom-model-state .
+```
+and get the the following structure:
+```
+my-custom-model-state/
+| -- config.json
+| -- model.pt
+my-custom-model-state.tar
+```
+
+#### Uploading to the web instance
+
+Before uploading the `.tar` file, make sure you have first added your custom
+plugin as outlined in the [plugin integration guide](..//01_create_new_plugin/).
+
+Then, go to the `Neural Networks` section in the left menu and select
+`UPLOAD .TAR` button on top:
+
+![](img/nn-upload-tar-button.png)
+
+On the upload page, fill in the details and drag your `.tar` file to the
+`"Weights"` area. If you have generated model weights randomly, don't forget to
+check the `"For Transfer Learning Only"` box to make sure you don't accidentally
+use your randomly initialized model for inference later:
+
+![](img/nn-upload-tar-settings.png)
+
+That's it. Now you will see the freshly uploaded neural network under
+`Neural Networks` menu, and run training and inference with it.

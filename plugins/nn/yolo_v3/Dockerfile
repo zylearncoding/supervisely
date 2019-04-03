@@ -1,15 +1,26 @@
-FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+ARG REGISTRY
+ARG TAG
+FROM ${REGISTRY}/base-py:${TAG}
 
+##############################################################################
+# devel components
+##############################################################################
 RUN apt-get update && apt-get install -y --no-install-recommends \
-         build-essential \
-         cmake \
-         git \
-         curl \
-         vim \
-         ca-certificates \
-         libjpeg-dev \
-         libpng-dev &&\
-     rm -rf /var/lib/apt/lists/*
+        cuda-libraries-dev-$CUDA_PKG_VERSION \
+        cuda-nvml-dev-$CUDA_PKG_VERSION \
+        cuda-minimal-build-$CUDA_PKG_VERSION \
+        cuda-command-line-tools-$CUDA_PKG_VERSION \
+        cuda-core-9-0=9.0.176.3-1 \
+        cuda-cublas-dev-9-0=9.0.176.4-1 \
+        libnccl-dev=$NCCL_VERSION-1+cuda9.0 && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV LIBRARY_PATH /usr/local/cuda/lib64/stubs
+ENV CUDNN_VERSION 7.4.2.24
+
+RUN apt-get update && apt-get install -y --no-install-recommends --allow-change-held-packages \
+            libcudnn7=$CUDNN_VERSION-1+cuda9.0 \
+            libcudnn7-dev=$CUDNN_VERSION-1+cuda9.0
 
 ENV LD_LIBRARY_PATH=/usr/local/cuda/lib64:$LD_LIBRARY_PATH
 
@@ -18,60 +29,12 @@ RUN apt-get update && \
     libopencv-dev=2.4.9.1+dfsg-1.5ubuntu1.1 && \
     ldconfig
 
-ENV CONDA_DIR /opt/conda
-ENV PATH $CONDA_DIR/bin:$PATH
-
-RUN mkdir -p $CONDA_DIR && \
-    echo export PATH=$CONDA_DIR/bin:'$PATH' > /etc/profile.d/conda.sh && \
-    apt-get update && \
-    apt-get install -y wget git libhdf5-dev g++ graphviz && \
-    wget --quiet https://repo.continuum.io/miniconda/Miniconda3-4.3.27.1-Linux-x86_64.sh && \
-    /bin/bash /Miniconda3-4.3.27.1-Linux-x86_64.sh -f -b -p $CONDA_DIR && \
-    rm Miniconda3-4.3.27.1-Linux-x86_64.sh
-
-# Python
-ARG python_version=3.6
-
-RUN conda install -y python=${python_version} && \
-    conda install Pillow scikit-learn notebook pandas matplotlib mkl nose pyyaml six h5py
-
-ENV PYTHONPATH='/src/:$PYTHONPATH'
-
-RUN conda install -y -c menpo opencv
-
 RUN pip install --no-cache-dir \
-        shapely \
-        python-json-logger==0.1.8 \
-        pybase64 \
         pyclipper \
-        cython \
-        networkx \
-        scikit-image \
-        opencv-python
+        cython
 
-############### java to run pycharm ###############
-RUN apt-get update && \
-    apt-get install -y default-jre && \
-    apt-get install -y default-jdk && \
-    ln -s /usr/lib/jvm/java-7-openjdk-amd64 /jre
-ENV JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
-
-
-##############################################################################
-# Additional project libraries
-##############################################################################
-RUN pip install --no-cache-dir \
-    pandas==0.22.0 \
-    grpcio==1.12.1 \
-    grpcio-tools==1.12.1 \
-    simplejson==3.16.0
-
-RUN pip install requests-toolbelt
-RUN pip install PTable
-RUN apt-get install -y fonts-noto=20160116-1
-
-
-ENV LANG C.UTF-8
+# OpenCV with version 3.4.1 (in base) has bug for C headers.
+RUN conda install -y opencv=3.4.2
 
 ############### copy code ###############
 ARG MODULE_PATH
