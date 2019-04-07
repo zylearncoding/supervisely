@@ -11,6 +11,7 @@ from PIL import Image
 from typing import List, Dict
 
 import supervisely_lib as sly
+from supervisely_lib.io.json import load_json_file
 
 
 IMAGE_DIR_NAME = 'img'
@@ -58,7 +59,7 @@ def read_mask_labels(mask_path: str, classes_mapping: Dict, obj_classes: sly.Obj
 def convert():
     img_dir = join(sly.TaskPaths.DATA_DIR, IMAGE_DIR_NAME)
     ann_dir = join(sly.TaskPaths.DATA_DIR, ANNOTATION_DIR_NAME)
-    tasks_settings = json.load(open(sly.TaskPaths.SETTINGS_PATH, 'r'))
+    tasks_settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
 
     classes_mapping = DEFAULT_CLASSES_MAPPING
     if CLASSES_MAPPING_KEY in tasks_settings[OPTIONS]:
@@ -81,18 +82,25 @@ def convert():
     for img_fp in images_pathes:
         full_img_fp = join(img_dir, img_fp)
         image = read_image_pillow(full_img_fp)
-        image_name = sly.fs.get_file_name(full_img_fp)
+        image_name = os.path.basename(full_img_fp)
+        sample_name = sly.fs.get_file_name(full_img_fp)
 
         ann = sly.Annotation(image.shape[:2])
-        if image_name not in masks_map:
-            sly.logger.warning('Mask for image {} doesn\'t exist.'.format(image_name))
+        mask_name = masks_map.pop(sample_name, None)
+        if mask_name is None:
+            sly.logger.warning('Mask for image {} doesn\'t exist.'.format(sample_name))
         else:
-            full_mask_fp = join(ann_dir, masks_map[image_name])
+            full_mask_fp = join(ann_dir, mask_name)
             labels = read_mask_labels(full_mask_fp, classes_mapping, obj_class_collection)
             ann = ann.add_labels(labels)
 
-        ds.add_item_np(image_name, image, img_ext=sly.fs.get_file_ext(full_img_fp), ann=ann)
+        ds.add_item_np(image_name, image, ann=ann)
         progress.iter_done_report()
+
+    if len(masks_map) > 0:
+        masks_list = list(masks_map.values())
+        sly.logger.warning('Images for masks doesn\'t exist. Masks: {}'.format(masks_list))
+
 
 
 def main():

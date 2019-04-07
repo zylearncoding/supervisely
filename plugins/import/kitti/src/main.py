@@ -56,9 +56,9 @@ def read_datasets():
     ds_names = [x.name for x in os.scandir(sly.TaskPaths.DATA_DIR) if x.is_dir()]
     for ds_name in ds_names:
         imgdir = images_dir(ds_name)
-        sample_names = [x.name for x in os.scandir(imgdir) if x.is_file()]
-        src_datasets[ds_name] = sample_names
-        sly.logger.info('Found source dataset "{}" with {} sample(s).'.format(ds_name, len(sample_names)))
+        images_names = [x.name for x in os.scandir(imgdir) if x.is_file()]
+        src_datasets[ds_name] = images_names
+        sly.logger.info('Found source dataset "{}" with {} sample(s).'.format(ds_name, len(images_names)))
     return src_datasets
 
 
@@ -66,14 +66,14 @@ def generate_annotation(src_img_path, inst_path, id_to_class, class_to_color, cl
     ann = sly.Annotation.from_img_path(src_img_path)
 
     if os.path.isfile(inst_path):
-        instance_img = cv2.imread(inst_path, cv2.IMREAD_UNCHANGED) # expect uint16
+        instance_img = cv2.imread(inst_path, cv2.IMREAD_UNCHANGED)  # expect uint16
         col2coord = get_color_to_coordinates(instance_img)
 
         # Some dirty hack to determine class correctly, low byte is unused. (Low byte describe)
         current_color_to_class = {color: id_to_class[int(color // 256)] for color in col2coord.keys()}
 
         for color, class_name in current_color_to_class.items():
-            mask = instance_img == color  # exact match for 1d uint16
+            mask = (instance_img == color)  # exact match for 1d uint16
             bitmap = sly.Bitmap(mask)
 
             if not classes_collection.has_key(class_name):
@@ -90,7 +90,7 @@ def generate_annotation(src_img_path, inst_path, id_to_class, class_to_color, cl
 
 
 def convert():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     out_project = sly.Project(os.path.join(sly.TaskPaths.RESULTS_DIR, settings['res_names']['project']),
                               sly.OpenMode.CREATE)
     classes_collection = sly.ObjClassCollection()
@@ -100,19 +100,18 @@ def convert():
     skipped_count = 0
     samples_count = 0
 
-    for ds_name, sample_names in src_datasets.items():
+    for ds_name, images_names in src_datasets.items():
         dataset = out_project.create_dataset(ds_name)
-        dataset_progress = sly.Progress('Dataset {!r}'.format(ds_name), len(sample_names))
+        dataset_progress = sly.Progress('Dataset {!r}'.format(ds_name), len(images_names))
 
-        for name in sample_names:
+        for img_name in images_names:
             try:
-                src_img_path = osp.join(images_dir(ds_name), name)
-                inst_path = osp.join(instances_dir(ds_name), name)
+                src_img_path = osp.join(images_dir(ds_name), img_name)
+                inst_path = osp.join(instances_dir(ds_name), img_name)
                 ann, classes_collection = generate_annotation(src_img_path, inst_path, id_to_class, class_to_color,
                                                               classes_collection)
-                item_name = osp.splitext(name)[0]
 
-                dataset.add_item_file(item_name, src_img_path, ann)
+                dataset.add_item_file(img_name, src_img_path, ann)
                 samples_count += 1
 
             except Exception as e:
@@ -120,7 +119,7 @@ def convert():
                 sly.logger.warn('Input sample skipped due to error: {}'.format(exc_str), exc_info=True, extra={
                     'exc_str': exc_str,
                     'dataset_name': ds_name,
-                    'image_name': name
+                    'image_name': img_name
                 })
                 skipped_count += 1
             dataset_progress.iter_done_report()

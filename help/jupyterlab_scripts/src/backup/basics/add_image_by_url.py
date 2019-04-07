@@ -30,8 +30,7 @@ print('Number of images in project: ', api.project.get_images_count(project.id))
 
 img_url = 'http://192.168.1.69:5555/h5un6l2bnaz1vj8a9qgms4-public/assets/projects/images/V/N/iQ/wOqv967pfMoMcJQ5Zo8j666wkABscaSR0f1N8lfKgc1eG98GVI1qxTv0UPiKsbsTFuCSEVhJpU6tCaYkUD0eJo69xzy3dwCRnvHaAwKFwZdr0jwfYrqQn0uf6PeN.png'
 response = requests.get(img_url)
-image_bytes = np.asarray(bytearray(response.content), dtype="uint8")
-img = sly.image.read_bytes(image_bytes)
+img = sly.image.read_bytes(response.content)
 #visualize image here
 print(img.shape)
 

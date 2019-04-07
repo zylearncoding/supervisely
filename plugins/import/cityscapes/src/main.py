@@ -7,6 +7,9 @@ import json
 import supervisely_lib as sly
 
 
+IMAGE_EXT = '.png'
+
+
 class AnnotationConvertionException(Exception):
     pass
 
@@ -20,7 +23,7 @@ class ImporterCityscapes:
     @classmethod
     def json_path_to_image_path(cls, json_path):
         img_path = json_path.replace('/gtFine/', '/leftImg8bit/')
-        img_path = img_path.replace('_gtFine_polygons.json', '_leftImg8bit.png')
+        img_path = img_path.replace('_gtFine_polygons.json', '_leftImg8bit' + IMAGE_EXT)
         return img_path
 
     @staticmethod
@@ -66,7 +69,7 @@ class ImporterCityscapes:
         files_fine = glob.glob(search_fine)
         files_fine.sort()
 
-        search_imgs = os.path.join(sly.TaskPaths.DATA_DIR, "leftImg8bit", "*", "*", "*_leftImg8bit.png")
+        search_imgs = os.path.join(sly.TaskPaths.DATA_DIR, "leftImg8bit", "*", "*", "*_leftImg8bit" + IMAGE_EXT)
         files_imgs = glob.glob(search_imgs)
         files_imgs.sort()
 
@@ -84,7 +87,7 @@ class ImporterCityscapes:
             if ds is None:
                 ds = out_project.create_dataset(dataset_name)
 
-            sample_name = json_filename.replace('_gtFine_polygons.json', '')
+            sample_name = json_filename.replace('_gtFine_polygons.json', IMAGE_EXT)
             orig_img_path = self.json_path_to_image_path(orig_ann_path)
 
             tag_path = os.path.split(parent_dir)[0]

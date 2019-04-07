@@ -44,11 +44,12 @@ with
 
 <img src="https://i.imgur.com/OMYj1bb.gif" width=200>
 
-where ![enter image description here](https://i.imgur.com/gK6LQqY.gif) is the measured precision at recall ![enter image description here](https://i.imgur.com/NKB2rY3.gif).
+where ![](https://i.imgur.com/gK6LQqY.gif) is the measured precision at recall ![enter image description here](https://i.imgur.com/NKB2rY3.gif).
 Instead of using the precision observed at each point, the AP is obtained by interpolating the precision only at the 11 levels *r* taking the **maximum precision whose recall value is greater than** *r*.
 
 
 ## Config example
+
 ```json
 {
   "iou": 0.5,
@@ -60,6 +61,7 @@ Instead of using the precision observed at each point, the AP is obtained by int
   }
 }
 ```
+
 Here:
 
 1. **"iou"** - Intersection over Union threshold.

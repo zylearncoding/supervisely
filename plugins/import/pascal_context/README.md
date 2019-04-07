@@ -26,8 +26,11 @@ Download annotations and labels.txt from [official site](https://cs.stanford.edu
 ```
 
 4) Open [Supervisely import](supervise.ly/import) page. Choose `Pascal Context` import plugin.
-5) Select all subdirectories (`ImageSets`, `trainval`), file labels.txt and drag and drop them to browser. Wait a little bit.    
+
+5) Select all subdirectories (`ImageSets`, `trainval`), file labels.txt and drag and drop them to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow dataset: `dataset`.
 
     ![](https://i.imgur.com/23zor6P.png)

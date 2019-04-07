@@ -1,5 +1,5 @@
-
 # Metrics
+
 ## Usage Example
 
 1) Open Explore -> Plugins tab:

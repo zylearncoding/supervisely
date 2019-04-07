@@ -25,6 +25,7 @@ wget https://storage.googleapis.com/download.tensorflow.org/models/nasnet-a_mobi
 tar -xvf nasnet-a_mobile_04_10_2017.tar.gz
 rm nasnet-a_mobile_04_10_2017.tar.gz
 ```
+
 More information on integrating NASNet Models into your project can be found at the [TF-Slim Image Classification Library](https://github.com/tensorflow/models/blob/master/research/slim/README.md).
 
 To get started running models on-device go to [TensorFlow Mobile](https://www.tensorflow.org/mobile/).

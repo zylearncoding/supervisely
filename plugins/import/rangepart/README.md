@@ -36,8 +36,11 @@
 ```
 
 4) Open [Supervisely import](supervise.ly/import) page. Choose `RangePart` import plugin.
-5) Select all directories (`0.8` ... `6.0`) and drag and drop it to browser. Wait a little bit.    
+
+5) Select all directories (`0.8` ... `6.0`) and drag and drop it to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow datasets: `0.8` ... `6.0`.
 
     ![](https://i.imgur.com/9F5PfH2.png)

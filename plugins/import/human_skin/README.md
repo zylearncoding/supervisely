@@ -32,8 +32,11 @@
 ```
  
 4) Open [Supervisely import](supervise.ly/import) page. Choose `Pascal VOC` import plugin.
-5) Select all subdirectories (`Ground_Truth`, `Pratheepan_Dataset`) and drag and drop them to browser. Wait a little bit.    
+
+5) Select all subdirectories (`Ground_Truth`, `Pratheepan_Dataset`) and drag and drop them to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow datasets: `FacePhoto`, `FamilyPhoto`.
 
     ![](https://i.imgur.com/GvCtlII.png)

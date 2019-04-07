@@ -78,7 +78,6 @@ class TagMeta:
             raise ValueError('Value option {} already exists for tag meta {}'.format(value, self.to_json()))
         self._json_data['values'].append(value)
 
-
     def is_valid_value(self, value):
         if self.value_type == TagMeta.VALUE_TYPE_NONE:
             return value is None
@@ -95,7 +94,13 @@ class TagMeta:
         return deepcopy(self._json_data)
 
     def __eq__(self, other):
-        return type(other) == self.__class__ and self.to_json() == other.to_json()
+        if type(other) != self.__class__ or self.value_type != other.value_type:
+            return False
+
+        if self.value_type == TagMeta.VALUE_TYPE_NONE:
+            return self.name == other.name
+        else:
+            return self.to_json() == other.to_json()
 
     @staticmethod
     def from_tag_json(tag_json):

@@ -43,8 +43,11 @@
 ```
  
 4) Open [Supervisely import](supervise.ly/import) page. Choose `Sceneparsing_Segmentation` import plugin.
-5) Select directory (`ADEChallengeData2016`) and drag and drop it to browser. Wait a little bit.    
+
+5) Select directory (`ADEChallengeData2016`) and drag and drop it to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow datasets: `training`, `validation`.
 
     ![](https://i.imgur.com/D6ZSg4c.png)

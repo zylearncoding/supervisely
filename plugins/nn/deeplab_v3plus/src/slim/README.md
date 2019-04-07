@@ -498,6 +498,7 @@ following error:
 ```bash
 InvalidArgumentError: Assign requires shapes of both tensors to match. lhs shape= [1001] rhs shape= [1000]
 ```
+
 This is due to the fact that the VGG and ResNet V1 final layers have only 1000
 outputs rather than 1001.
 

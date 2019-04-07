@@ -4,8 +4,8 @@ import os
 import requests
 import json
 from slugify import slugify
-from supervisely_lib.utils import logging_utils
-from supervisely_lib.tasks import progress_counter
+
+import supervisely_lib as sly
 
 
 headers = {}
@@ -91,13 +91,17 @@ def process_dataset_links(project_id, file_path):
     dataset_id = create_dataset_api(project_id, dataset_name)
     with open(file_path) as fp:
         lines = fp.readlines()
-        progress = progress_counter.ProgressCounter('Import dataset: {}'.format(dataset_name), len(lines))
+        progress = sly.Progress('Import dataset: {}'.format(dataset_name), len(lines))
         for line in lines:
             url = line.strip()
             if not url:
                 continue
-            image_name = os.path.splitext(os.path.basename(url))[0]
+            image_split_name = os.path.splitext(os.path.basename(url))
+            image_name = image_split_name[0]
             image_name = slugify(image_name)
+            if len(image_split_name) == 2:
+                image_ext = image_split_name[1]
+                image_name = image_name + image_ext
             image_id = add_image_to_dataset(dataset_id, image_name, url)
             progress.iter_done_report()
 
@@ -126,4 +130,4 @@ def main():
 
 
 if __name__ == '__main__':
-    logging_utils.main_wrapper('IMAGES_ONLY_IMPORT', main)
+    sly.main_wrapper('IMAGES_ONLY_IMPORT', main)

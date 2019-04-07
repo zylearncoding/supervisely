@@ -35,8 +35,11 @@
 ```
 
 4) Open [Supervisely import](supervise.ly/import) page. Choose `Berkeley` import plugin.
-5) Select all directory (`bdd100k`) and drag and drop them to browser. Wait a little bit.    
+
+5) Select all directory (`bdd100k`) and drag and drop them to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow datasets: `dataset`.
 
     ![](https://i.imgur.com/wyRH38K.png)

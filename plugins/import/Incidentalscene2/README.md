@@ -7,7 +7,6 @@
    * ch4_test_word_images_gt.zip
 
 
-
 2) Unpack archive
 
 3) Directory structure have to be the following:
@@ -25,14 +24,15 @@
 	    ├── gt.txt	
 	    ├── word_1.png	
 	    ├── word_2.png	
-	    └── ...	
-
-      
+	    └── ...
 ```
  
 4) Open [Supervisely import](supervise.ly/import) page. Choose `Incidental2` import plugin.
-5) Select directory (`ch4_training_word_images_gt`) and drag and drop them to browser. Wait a little bit.    
+
+5) Select directory (`ch4_training_word_images_gt`) and drag and drop them to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow dataset: `dataset`.
 
     ![](https://i.imgur.com/yHYXjcC.png)

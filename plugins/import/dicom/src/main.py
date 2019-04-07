@@ -108,7 +108,7 @@ def convert():
                             img_tag_metas = img_tag_metas.add(tag_meta)
 
                     # Save annotations
-                    dataset.add_item_np(sample_name, image, img_ext='.png', ann=ann)
+                    dataset.add_item_np(sample_name + '.png', image, ann=ann)
 
             except Exception as e:
                 exc_str = str(e)

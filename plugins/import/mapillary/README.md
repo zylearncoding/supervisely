@@ -9,54 +9,57 @@
 
 3) Directory structure have to be the following:
 
-    ```
-    .
-    ├── config.json
-    │ 
-    ├── training
-    │   ├── images
-    │   │   ├── 0035fkbjWljhaftpVM37-g.jpg
-    │   │   ├── 00qclUcInksIYnm19b1Xfw.jpg
-    │   │   ├── ...
-    │   ├── instances
-    │   │   ├── 0035fkbjWljhaftpVM37-g.png
-    │   │   ├── 00qclUcInksIYnm19b1Xfw.png
-    │   │   ├── ...
-    │   └── labels
-    │       ├── 0035fkbjWljhaftpVM37-g.png
-    │       ├── 00qclUcInksIYnm19b1Xfw.png
-    │       ├── ...
-    │ 
-    ├── validation
-    │   ├── images
-    │   │   ├── 0035fkbjWljhaftpVM37-g.jpg
-    │   │   ├── 00qclUcInksIYnm19b1Xfw.jpg
-    │   │   ├── ...
-    │   ├── instances
-    │   │   ├── 0035fkbjWljhaftpVM37-g.png
-    │   │   ├── 00qclUcInksIYnm19b1Xfw.png
-    │   │   ├── ...
-    │   └── labels
-    │       ├── 0035fkbjWljhaftpVM37-g.png
-    │       ├── 00qclUcInksIYnm19b1Xfw.png
-    │       ├── ...
-    │
-    └── testing
-    ├── images
-    │   ├── w6G8WHFnNfiJR-457i0MWQ.jpg
-    │   ├── 3q78YjbnUSumHU5n-iYEzA.jpg
-    │   ├── ...
-    ├── instances
-    │   ├── [empty folder]
-    └── labels
-        ├── [empty folder]
-    
-    
-    ```
+```
+.
+├── config.json
+│ 
+├── training
+│   ├── images
+│   │   ├── 0035fkbjWljhaftpVM37-g.jpg
+│   │   ├── 00qclUcInksIYnm19b1Xfw.jpg
+│   │   ├── ...
+│   ├── instances
+│   │   ├── 0035fkbjWljhaftpVM37-g.png
+│   │   ├── 00qclUcInksIYnm19b1Xfw.png
+│   │   ├── ...
+│   └── labels
+│       ├── 0035fkbjWljhaftpVM37-g.png
+│       ├── 00qclUcInksIYnm19b1Xfw.png
+│       ├── ...
+│ 
+├── validation
+│   ├── images
+│   │   ├── 0035fkbjWljhaftpVM37-g.jpg
+│   │   ├── 00qclUcInksIYnm19b1Xfw.jpg
+│   │   ├── ...
+│   ├── instances
+│   │   ├── 0035fkbjWljhaftpVM37-g.png
+│   │   ├── 00qclUcInksIYnm19b1Xfw.png
+│   │   ├── ...
+│   └── labels
+│       ├── 0035fkbjWljhaftpVM37-g.png
+│       ├── 00qclUcInksIYnm19b1Xfw.png
+│       ├── ...
+│
+└── testing
+├── images
+│   ├── w6G8WHFnNfiJR-457i0MWQ.jpg
+│   ├── 3q78YjbnUSumHU5n-iYEzA.jpg
+│   ├── ...
+├── instances
+│   ├── [empty folder]
+└── labels
+    ├── [empty folder]
+
+
+```
 
 4) Open [Supervisely Import](supervise.ly/import) page. Choose `Mapillary` import plugin.
-5) Select one or more subdirectories (`training`, `validation`, `testing`) and drag and drop them to browser.    
+
+5) Select one or more subdirectories (`training`, `validation`, `testing`) and drag and drop them to browser.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view created project:
 
     ![](https://i.imgur.com/ncvoi9J.jpg)

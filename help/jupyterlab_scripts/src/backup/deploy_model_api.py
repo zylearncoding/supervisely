@@ -21,8 +21,7 @@ import supervisely_lib as sly
 import time
 
 response = requests.get(img_url)
-image_bytes = np.asarray(bytearray(response.content), dtype="uint8")
-img = sly.image.read_bytes(image_bytes)
+img = sly.image.read_bytes(response.content)
 print(img.shape)
 
 #@TODO: what if model has already deployed ???

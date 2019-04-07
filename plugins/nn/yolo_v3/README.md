@@ -2,7 +2,6 @@
 
 > You only look once (YOLO) is a state-of-the-art, real-time object detection system. On a Pascal Titan X it processes images at 30 FPS and has a mAP of 57.9% on COCO test-dev.
 
-
 ### Description:
 - **Paper**: [YOLOv3: An Incremental Improvement (2018)](https://arxiv.org/abs/1804.02767)
 - **Framework**: [Darknet](https://pjreddie.com/darknet)
@@ -15,11 +14,11 @@
 ---
 
 ### Architecture
-<center><img src="https://i.imgur.com/XWgvztV.png" width=960/></center>
+<img src="https://i.imgur.com/XWgvztV.png" width=960/>
 
 
 ### Performance
-<center><img src="https://cdn-images-1.medium.com/max/1600/1*YpNE9OQeshABhBgjyEXlLA.png" width=512/></center>
+<img src="https://cdn-images-1.medium.com/max/1600/1*YpNE9OQeshABhBgjyEXlLA.png" width=512/>
 
 ### Train configuration
 _General train configuration available in model presets._ 
@@ -41,6 +40,7 @@ Also you can read common training configurations [documentation](https://docs.su
 - `enable_augmentations` - current implementation contains strong augmentation system. If you want to use it select `true` or `false` otherwise.
 
 Full training configuration example:
+
 ```json
 {
     "lr": 0.0001,

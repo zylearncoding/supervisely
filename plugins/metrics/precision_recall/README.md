@@ -6,6 +6,7 @@ A key role in calculating metrics for object detection and instance segmentation
 Intersection Over Union (IOU) is measure based on Jaccard Index that evaluates the overlap between two bounding boxes  or instance segments. It requires a ground truth bounding box(instance segment)  Bgt and a predicted bounding box(instance segment)  Bp.
 
 <img src="https://i.imgur.com/V0m39t1.png" height=120 width=256>
+
  By applying the IOU we can tell if a detection is valid (True Positive) or not (False Positive).  
 IOU is given by the overlapping area between the predicted instance and the ground truth instance divided by the area of union between them:
 
@@ -35,6 +36,7 @@ Recall is the ability of a model to find all the relevant cases (all ground trut
 <img src="https://i.imgur.com/FJlatE4.png" width=512/>
 
 ## Config example
+
 ```json
 {
   "iou": 0.5,
@@ -46,6 +48,7 @@ Recall is the ability of a model to find all the relevant cases (all ground trut
   }
 }
 ```
+
 Here:
 
 1. **"iou"** - Intersection over Union threshold.

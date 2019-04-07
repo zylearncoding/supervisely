@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from collections import namedtuple
 import os
 import re
 
@@ -7,13 +8,30 @@ from legacy_supervisely_lib import sly_logger
 from legacy_supervisely_lib import logger, EventType
 from legacy_supervisely_lib.dtl_utils.dtl_helper import DtlHelper, DtlPaths
 from legacy_supervisely_lib.dtl_utils.image_descriptor import ImageDescriptor
-from legacy_supervisely_lib.project.project_structure import ProjectFS
 from legacy_supervisely_lib.tasks import task_helpers
 from legacy_supervisely_lib.tasks import progress_counter
 from legacy_supervisely_lib.utils import json_utils
 from legacy_supervisely_lib.utils import logging_utils
 
+import supervisely_lib as sly
+
 from Net import Net
+
+LegacyProjectItem = namedtuple('LegacyProjectItem', [
+    'project_name', 'ds_name', 'image_name', 'ia_data', 'img_path', 'ann_path',
+])
+
+
+def make_legacy_project_item(project: sly.Project, dataset, item_name):
+    item_name_base, item_ext = os.path.splitext(item_name)
+    return LegacyProjectItem(
+        project_name=project.name,
+        ds_name=dataset.name,
+        image_name=item_name_base,
+        ia_data = {'image_ext': item_ext},
+        img_path=dataset.get_img_path(item_name),
+        ann_path=dataset.get_ann_path(item_name)
+    )
 
 
 def check_in_graph():
@@ -38,13 +56,10 @@ def calculate_datasets_conflict_map(helper):
 
     # Save all [datasets : projects] relations
     for _, pr_dir in helper.in_project_dirs.items():
-        root_path, project_name = ProjectFS.split_dir_project(pr_dir)
-        project_fs = ProjectFS.from_disk(root_path, project_name, by_annotations=True)
-        datasets_list = list(project_fs.pr_structure.datasets.keys())
-        for dataset_name in datasets_list:
-            projects_list = tmp_datasets_map.get(dataset_name, [])
-            projects_list.append(project_name)
-            tmp_datasets_map[dataset_name] = projects_list
+        project = sly.Project(directory=pr_dir, mode=sly.OpenMode.READ)
+        for dataset in project:
+            projects_list = tmp_datasets_map.setdefault(dataset.name, [])
+            projects_list.append(project.name)
 
     datasets_conflict_map = {}
     for dataset_name in tmp_datasets_map:
@@ -68,29 +83,29 @@ def main():
     # is_archive = net.is_archive()
     results_counter = 0
     for pr_name, pr_dir in helper.in_project_dirs.items():
-
-        root_path, project_name = ProjectFS.split_dir_project(pr_dir)
-        project_fs = ProjectFS.from_disk(root_path, project_name, by_annotations=True)
-        progress = progress_counter.progress_counter_dtl(pr_name, project_fs.image_cnt)
-
-        for sample in project_fs:
-            try:
-                img_desc = ImageDescriptor(sample, datasets_conflict_map[pr_name][sample.ds_name])
-                ann = json_utils.json_load(sample.ann_path)
-                data_el = (img_desc, ann)
-                export_output_generator = net.start(data_el)
-                for res_export in export_output_generator:
-                    logger.trace("image processed", extra={'img_name': res_export[0][0].get_img_name()})
-                    results_counter += 1
-            except Exception as e:
-                extra = {
-                    'project_name': sample.project_name,
-                    'ds_name': sample.ds_name,
-                    'image_name': sample.image_name,
-                    'exc_str': str(e),
-                }
-                logger.warn('Image was skipped because some error occurred', exc_info=True, extra=extra)
-            progress.iter_done_report()
+        project = sly.Project(directory=pr_dir, mode=sly.OpenMode.READ)
+        progress = progress_counter.progress_counter_dtl(pr_name, project.total_items)
+        for dataset in project:
+            for item_name in dataset:
+                try:
+                    img_desc = ImageDescriptor(
+                        make_legacy_project_item(project, dataset, item_name),
+                        datasets_conflict_map[project.name][dataset.name])
+                    ann = json_utils.json_load(dataset.get_ann_path(item_name))
+                    data_el = (img_desc, ann)
+                    export_output_generator = net.start(data_el)
+                    for res_export in export_output_generator:
+                        logger.trace("image processed", extra={'img_name': res_export[0][0].get_img_name()})
+                        results_counter += 1
+                except Exception as e:
+                    extra = {
+                        'project_name': project.name,
+                        'ds_name': dataset.name,
+                        'image_name': item_name,
+                        'exc_str': str(e),
+                    }
+                    logger.warn('Image was skipped because some error occurred', exc_info=True, extra=extra)
+                progress.iter_done_report()
 
     logger.info('DTL finished', extra={'event_type': EventType.DTL_APPLIED, 'new_proj_size': results_counter})
 

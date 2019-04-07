@@ -12,6 +12,7 @@ from legacy_supervisely_lib.project.project_meta import ProjectMeta
 from legacy_supervisely_lib.utils import json_utils
 from legacy_supervisely_lib.utils import os_utils
 from legacy_supervisely_lib.utils.stat_timer import TinyTimer, global_timer
+from legacy_supervisely_lib import logger
 
 from classes_utils import ClassConstants
 
@@ -200,7 +201,10 @@ class Layer:
             rm_imtags = [tags_lib.TagMeta.from_tag_json(tag) for tag in self.get_removed_tags()]
             res_meta.img_tags = res_meta.img_tags.difference(rm_imtags)
             new_imtags = [tags_lib.TagMeta.from_tag_json(tag) for tag in self.get_added_tags()]
-            #res_meta.img_tags = res_meta.img_tags.update(new_imtags)
+            new_imtags_exist = res_meta.img_tags.intersection(new_imtags).to_list()
+            if len(new_imtags_exist) != 0:
+                exist_tag_names = [t.name for t in new_imtags]
+                logger.warn('Tags {} already exist.'.format(exist_tag_names))
             res_meta.img_tags.update(new_imtags)
             self.output_meta = res_meta
         except Exception as e:

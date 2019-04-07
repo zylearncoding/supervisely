@@ -26,8 +26,11 @@
 ```
  
 4) Open [Supervisely import](supervise.ly/import) page. Choose `ParisArt` import plugin.
-5) Select directory (`ParisArtDecoFacadesDataset-master`) and drag and drop it to browser. Wait a little bit.    
+
+5) Select directory (`ParisArtDecoFacadesDataset-master`) and drag and drop it to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow datasets: `dataset`.
 
     ![](https://i.imgur.com/VsOkWT8.png)

@@ -25,8 +25,11 @@ Download annotations from [official site](http://www.stat.ucla.edu/~xianjie.chen
 ```
 
 4) Open [Supervisely import](supervise.ly/import) page. Choose `Pascal Part` import plugin.
-5) Select all subdirectories (`ImageSets`, `Annotations_Part`) and drag and drop them to browser. Wait a little bit.    
+
+5) Select all subdirectories (`ImageSets`, `Annotations_Part`) and drag and drop them to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow dataset: `dataset`.
 
     ![](https://imgur.com/a/2LF9eSU)

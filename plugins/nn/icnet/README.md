@@ -16,7 +16,7 @@
 ‘CFF’ stands for cascade feature fusion. Numbers in parentheses are feature map size ratios to the full-resolution input. Operations are highlighted in brackets. The final ×4 upsampling in the bottom branch is only used during testing.
 
 ### Performance
-<center><img src="https://i.imgur.com/wYGYbGB.png" width=512/></center>
+<img src="https://i.imgur.com/wYGYbGB.png" width=512/>
 
 Results on Cityscapes test set with image resolution 1024×2048.
 

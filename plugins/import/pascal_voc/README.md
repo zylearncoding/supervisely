@@ -1,6 +1,5 @@
 # Pascal VOC Import
 
-
 #### Usage steps:
 1) Download `Pascal VOC` dataset from [official site](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/index.html). (Or use [direct Link](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar))
 
@@ -8,30 +7,33 @@
 
 3) Directory structure have to be the following:
 
-    ```text
-    .
-    ├── ImageSets
-    │   └── Segmentation
-    │       ├── train.txt
-    │       ├── trainval.txt
-    │       └── val.txt
-    ├── JPEGImages
-    │   ├── 2007_000032.jpg
-    │   ├── 2007_000033.jpg
-    │   ├── ...
-    ├── SegmentationClass
-    │   ├── 2007_000032.png
-    │   ├── 2007_000033.png
-    │   ├── ...
-    └── SegmentationObject
-        ├── 2007_000032.png
-        ├── 2007_000033.png
-        ├── ...
-    ```
+```text
+.
+├── ImageSets
+│   └── Segmentation
+│       ├── train.txt
+│       ├── trainval.txt
+│       └── val.txt
+├── JPEGImages
+│   ├── 2007_000032.jpg
+│   ├── 2007_000033.jpg
+│   ├── ...
+├── SegmentationClass
+│   ├── 2007_000032.png
+│   ├── 2007_000033.png
+│   ├── ...
+└── SegmentationObject
+    ├── 2007_000032.png
+    ├── 2007_000033.png
+    ├── ...
+```
  
 4) Open [Supervisely import](supervise.ly/import) page. Choose `Pascal VOC` import plugin.
-5) Select all subdirectories (`ImageSets`, `JPEGImages`, `SegmentationClass`, `SegmentationClass`) and drag and drop them to browser. Wait a little bit.    
+
+5) Select all subdirectories (`ImageSets`, `JPEGImages`, `SegmentationClass`, `SegmentationClass`) and drag and drop them to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow datasets: `train`, `trainval`, `val`.
 
     ![](https://imgur.com/37jUZZ1.jpg)

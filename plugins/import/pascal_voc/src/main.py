@@ -5,6 +5,7 @@ import json
 import numpy as np
 
 import supervisely_lib as sly
+from supervisely_lib.io.json import load_json_file
 
 
 # returns mapping: (r, g, b) color -> some (row, col) for each unique color except black
@@ -45,11 +46,13 @@ default_classes_colors = {
     'tvmonitor': (0, 64, 128),
 }
 
+MASKS_EXTENSION = '.png'
+
 
 class ImporterPascalVOCSegm:
 
     def __init__(self):
-        self.settings = json.load(open(sly.TaskPaths.SETTINGS_PATH, "r"))
+        self.settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
         self.lists_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'ImageSets/Segmentation')
         self.imgs_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'JPEGImages')
         self.segm_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'SegmentationClass')
@@ -128,23 +131,35 @@ class ImporterPascalVOCSegm:
         return ann
 
     def convert(self):
-        out_project = sly.Project(os.path.join(sly.TaskPaths.RESULTS_DIR, self.settings['res_names']['project']), sly.OpenMode.CREATE)
+        out_project = sly.Project(
+            os.path.join(sly.TaskPaths.RESULTS_DIR, self.settings['res_names']['project']), sly.OpenMode.CREATE)
+
+        images_filenames = dict()
+        for image_path in sly.fs.list_files(self.imgs_dir):
+            image_name_noext = sly.fs.get_file_name(image_path)
+            if image_name_noext in images_filenames:
+                raise RuntimeError('Multiple image with the same base name {!r} exist.'.format(image_name_noext))
+            images_filenames[image_name_noext] = image_path
 
         for ds_name, sample_names in self.src_datasets.items():
             ds = out_project.create_dataset(ds_name)
             progress = sly.Progress('Dataset: {!r}'.format(ds_name), len(sample_names))
 
-            for name in sample_names:
-                src_img_path = os.path.join(self.imgs_dir, name + '.jpg')
-                segm_path = os.path.join(self.segm_dir, name + '.png')
+            for sample_name in sample_names:
+                src_img_path = images_filenames[sample_name]
+                src_img_filename = os.path.basename(src_img_path)
+                segm_path = os.path.join(self.segm_dir, sample_name, MASKS_EXTENSION)
+
                 inst_path = None
-
                 if self.with_instances:
-                    inst_path = os.path.join(self.inst_dir, name + '.png')
+                    inst_path = os.path.join(self.inst_dir, sample_name, MASKS_EXTENSION)
 
-                if all((os.path.isfile(x) or (x is None) for x in [src_img_path, segm_path, inst_path])):
+                if all((x is None) or os.path.isfile(x) for x in [src_img_path, segm_path, inst_path]):
                     ann = self._get_ann(src_img_path, segm_path, inst_path)
-                    ds.add_item_file(name, src_img_path, ann=ann)
+                    ds.add_item_file(src_img_filename, src_img_path, ann=ann)
+                else:
+                    sly.logger.warning("Processing '{}' skipped because no corresponding mask found."
+                                       .format(src_img_filename))
                 progress.iter_done_report()
 
         out_meta = sly.ProjectMeta(obj_classes=self.obj_classes)

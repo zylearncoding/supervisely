@@ -9,7 +9,6 @@
    * Challenge4_Test_Task1_GT.zip - 500 annotations	
 
 
-
 2) Unpack archive
 
 3) Directory structure have to be the following:
@@ -31,13 +30,15 @@
 	└── Challenge4_Test_Task1_GT	
 	    ├── gt_img_1.txt	
 	    ├── gt_img_2.txt	
-	    └── ...	
-       
+	    └── ...
 ```
  
 4) Open [Supervisely import](supervise.ly/import) page. Choose `Incidental` import plugin.
-5) Select all subdirectories (`ch4_training_images`, `ch4_training_localization_transcription_gt`, `ch4_test_images`, `Challenge4_Test_Task1_GT`) and drag and drop them to browser. Wait a little bit.    
+
+5) Select all subdirectories (`ch4_training_images`, `ch4_training_localization_transcription_gt`, `ch4_test_images`, `Challenge4_Test_Task1_GT`) and drag and drop them to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow dataset: `dataset`.
 
     ![](https://i.imgur.com/f957k9a.png)

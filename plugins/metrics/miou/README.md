@@ -1,5 +1,5 @@
-# <center> Intersection over Union (IoU) </center>
-### <center> Some theory</center>
+# Intersection over Union (IoU)
+### Some theory
 Intersection over Union also known as Jaccard index is a statistic used for comparing the similarity and diversity of sample sets. The Jaccard coefficient measures similarity between finite sample sets, and is defined as the size of the intersection divided by the size of the union of the sample sets:
 <center><img src="https://i.imgur.com/8ODEYrM.png"/></center>
 
@@ -27,6 +27,7 @@ Here is an example of object detection task, here green rectangle is “ground-t
 
 
 ### <center> Supervisely config example</center>
+
 ```json
 {
   "project_1": "project_1_name",
@@ -57,6 +58,7 @@ Next we apply our pretrained on COCO Mask-RCNN model to this pictures. Now we ha
 <center><img src="https://imgur.com/Cx5Awvw.png" width=700 /></center>
 
 To run IoU plugin we will use following config:
+
 ```json
 {
   "project_1": "original_data",
@@ -67,7 +69,6 @@ To run IoU plugin we will use following config:
   }
 }
 ```
-
 
 This plugin calculates IoU values for each pair of classes on each image and then show mean value for all images. Results can be seen in log panel:
 <center><img src="https://i.imgur.com/I4fSkAv.png" width=700/></center>

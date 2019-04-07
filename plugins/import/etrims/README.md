@@ -34,8 +34,11 @@
 ```
  
 4) Open [Supervisely import](supervise.ly/import) page. Choose `Etrims` import plugin.
-5) Select directory (`etrims-db_v1`) and drag and drop it to browser. Wait a little bit.    
+
+5) Select directory (`etrims-db_v1`) and drag and drop it to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow datasets: `04_etrims-ds`, `08_etrims-ds`.
 
     ![](https://i.imgur.com/xy7imgf.png)

@@ -2,9 +2,9 @@
 
 from copy import deepcopy
 
-from legacy_supervisely_lib.project.project_structure import ProjectWriterFS
-
 from Layer import Layer
+
+import supervisely_lib as sly
 
 
 class SuperviselyLayer(Layer):
@@ -22,7 +22,7 @@ class SuperviselyLayer(Layer):
         Layer.__init__(self, config)
         self.output_folder = output_folder
         self.net = net
-        self.pr_writer = ProjectWriterFS(output_folder)
+        self.out_project = sly.Project(directory=output_folder, mode=sly.OpenMode.CREATE)
         self.net_change_images = self.net.may_require_images()
 
     def is_archive(self):
@@ -34,16 +34,20 @@ class SuperviselyLayer(Layer):
     def process(self, data_el):
         img_desc, ann = data_el
 
-        free_name = self.net.get_free_name(img_desc)
-        if self.net_change_images:
-            if img_desc.need_write() is True:
-                self.pr_writer.write_image(img_desc, free_name)
-            else:
-                self.pr_writer.copy_image(img_desc, free_name)
-
         ann_to_save = deepcopy(ann)
         ann_to_save.normalize_figures()
         packed_ann = ann_to_save.pack()
-        self.pr_writer.write_ann(img_desc, packed_ann, free_name)
+
+        dataset_name = img_desc.get_res_ds_name()
+        if not self.out_project.datasets.has_key(dataset_name):
+            self.out_project.create_dataset(dataset_name)
+        out_dataset = self.out_project.datasets.get(dataset_name)
+
+        out_item_name = self.net.get_free_name(img_desc) + img_desc.get_image_ext()
+        if self.net_change_images:
+            if img_desc.need_write():
+                out_dataset.add_item_np(out_item_name, img_desc.image_data, ann=packed_ann)
+            else:
+                out_dataset.add_item_file(out_item_name, img_desc.get_img_path(), ann=packed_ann)
 
         yield ([img_desc, ann],)

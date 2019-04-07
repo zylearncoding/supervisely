@@ -36,6 +36,7 @@ Also you can read common training configurations [documentation](https://docs.su
 - `weights_init_type` - can be in one of 2 modes. In `transfer_learning` mode all possible weights will be transfered except last layer. In `continue_training` mode all weights will be transfered and validation for classes number and classes names order will be performed.
 
 Full training configuration example:
+
 ```json
 {
   "lr": 0.001,

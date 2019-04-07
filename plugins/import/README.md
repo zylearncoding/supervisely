@@ -1,6 +1,5 @@
 # Import Plugins
 
-
 This folder contains Import Plugins implemented by developers in Supervisely and researchers in community. The plugins are maintained by their respective authors. To propose a new plugin for inclusion, please submit a pull request.
 
 Import plugin convert custom format to Supervisely format. It allows to works with any dataset in standardized way.
@@ -49,6 +48,7 @@ To create custom Import Plugin we recommend to read:
 2. [How to create plugin](../how_to_create_plugin.md) 
 
 As you can see, your code will be executed within the docker container, directory with all task relevant data will be mounted as volume to `/sly_task_data`. Agent will prepare this task directory with the following structure: 
+
 ```
 /sly_task_data
 ├── data

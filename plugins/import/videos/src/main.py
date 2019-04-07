@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import json
+import os.path
 import skvideo.io
 import supervisely_lib as sly
 
@@ -8,7 +9,7 @@ DEFAULT_STEP = 25
 
 
 def convert_video():
-    task_settings = json.load(open(sly.TaskPaths.SETTINGS_PATH, 'r'))
+    task_settings = json.load(open(sly.TaskPaths.TASK_CONFIG_PATH, 'r'))
 
     step = DEFAULT_STEP
     if 'step' in task_settings['options']:
@@ -20,7 +21,8 @@ def convert_video():
     if len(video_paths) < 0:
         raise RuntimeError("Videos not found")
 
-    project = sly.Project(os.path.join(sly.TaskPaths.RESULTS_DIR, task_settings['res_names']['project']), sly.OpenMode.CREATE)
+    project_dir = os.path.join(sly.TaskPaths.RESULTS_DIR, task_settings['res_names']['project'])
+    project = sly.Project(directory=project_dir, mode=sly.OpenMode.CREATE)
     for video_path in video_paths:
         ds_name = sly.fs.get_file_name(video_path)
         ds = project.create_dataset(ds_name=ds_name)
@@ -33,7 +35,7 @@ def convert_video():
         for frame_id, image in enumerate(vreader.nextFrame()):
             if frame_id % step == 0:
                 img_name = "frame_{:05d}".format(frame_id)
-                ds.add_item_np(img_name, image, img_ext='.png')
+                ds.add_item_np(img_name + '.png', image)
 
             progress.iter_done_report()
 

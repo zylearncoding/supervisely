@@ -8,8 +8,6 @@ Download `coco` foto dataset from [official site](http://cocodataset.org/#downlo
    * COCO_Text.json
 
 
-
-
 2) Unpack archive
 
 3) Directory structure have to be the following:
@@ -25,8 +23,11 @@ Download `coco` foto dataset from [official site](http://cocodataset.org/#downlo
 ```
  
 4) Open [Supervisely import](supervise.ly/import) page. Choose `cocotext` import plugin.
-5) Select directory (`train2014`), COCO_Text.json file and drag and drop them to browser. Wait a little bit.    
+
+5) Select directory (`train2014`), COCO_Text.json file and drag and drop them to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow datasets: `train`, `val`.
 
     ![](https://i.imgur.com/3eAkfB8.png)

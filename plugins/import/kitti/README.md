@@ -9,31 +9,31 @@
 
 3) Directory structure have to be the following:
 
-    ```
-    .
-    ├── testing
-    │   └── image_2
-    │       ├── 000000_10.png
-    │       ├── ...
-    │       └── 000199_10.png
-    └── training
-        ├── image_2
-        │   ├── 000000_10.png
-        │   ├── ...
-        │   └── 000199_10.png
-        ├── instance
-        │   ├── 000000_10.png
-        │   ├── ...
-        │   └── 000199_10.png
-        ├── semantic
-        │   ├── 000000_10.png
-        │   ├── ...
-        │   └── 000199_10.png
-        └── semantic_rgb
-            ├── 000000_10.png
-            ├── ...
-            └── 000199_10.png
-    ```
+```
+.
+├── testing
+│   └── image_2
+│       ├── 000000_10.png
+│       ├── ...
+│       └── 000199_10.png
+└── training
+    ├── image_2
+    │   ├── 000000_10.png
+    │   ├── ...
+    │   └── 000199_10.png
+    ├── instance
+    │   ├── 000000_10.png
+    │   ├── ...
+    │   └── 000199_10.png
+    ├── semantic
+    │   ├── 000000_10.png
+    │   ├── ...
+    │   └── 000199_10.png
+    └── semantic_rgb
+        ├── 000000_10.png
+        ├── ...
+        └── 000199_10.png
+```
  
 4) Open [Supervisely import](supervise.ly/import) page. Choose `KITTI` import plugin.
 

@@ -103,12 +103,13 @@ class ImporterMapillary:
             ds = out_project.create_dataset(ds_name)
 
             for name in sample_names:
-                src_img_path = os.path.join(self._imgs_dir(ds_name), name + '.jpg')
+                img_name = name + '.jpg'
+                src_img_path = os.path.join(self._imgs_dir(ds_name), img_name)
                 inst_path = os.path.join(self._inst_dir(ds_name), name + '.png')
 
                 if os.path.isfile(src_img_path):
                     ann = self._generate_annotation(src_img_path, inst_path)
-                    ds.add_item_file(name, src_img_path, ann=ann)
+                    ds.add_item_file(img_name, src_img_path, ann=ann)
                 progress.iter_done_report()
 
         out_meta = sly.ProjectMeta(obj_classes=self.obj_classes)

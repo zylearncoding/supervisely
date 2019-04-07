@@ -44,8 +44,11 @@ Finally, we get a matrix that has the following structure:
 -   Each row and column correspond to each one of the classes supported by the model.
     
 -   The final row and column correspond to the class “nothing” which is used to indicate when an object of a specific class was not detected, or an object that was detected wasn’t part of the ground-truth.
-![enter image description here](https://i.imgur.com/MFcEI2c.png)
+
+![](https://i.imgur.com/MFcEI2c.png)
+
 ## Config example
+
 ```json
 {
   "iou": 0.5,
@@ -57,6 +60,7 @@ Finally, we get a matrix that has the following structure:
   }
 }
 ```
+
 Here:
 
 1. **"iou"** - Intersection over Union threshold.

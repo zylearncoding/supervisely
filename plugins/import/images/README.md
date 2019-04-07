@@ -1,4 +1,5 @@
-# Import Images 
+# Import Images
+
 This plugin allows you to upload only images without any annotations. It supports several input file structures: 
 
 ### 1.  Flat set of images.
@@ -11,6 +12,7 @@ In this case, you can drag and drop one or many images from the same directory. 
 ├── img_03.jpeg
 └── img_04.jpg
 ```
+
 Plugin upload all images, create Dataset **ds** and put images there.
 
 ### 2. Directories with images.

@@ -7,7 +7,7 @@ import supervisely_lib as sly
 
 def convert():
 
-    task_settings = json.load(open(sly.TaskPaths.SETTINGS_PATH, 'r'))
+    task_settings = json.load(open(sly.TaskPaths.TASK_CONFIG_PATH, 'r'))
     try:
         project = sly.Project(sly.TaskPaths.DATA_DIR, sly.OpenMode.READ)
     except FileNotFoundError:

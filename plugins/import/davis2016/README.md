@@ -46,8 +46,11 @@
 ```
  
 4) Open [Supervisely import](supervise.ly/import) page. Choose `davis2016` import plugin.
-5) Select all directory (`DAVIS`) and drag and drop it to browser. Wait a little bit.    
+
+5) Select all directory (`DAVIS`) and drag and drop it to browser. Wait a little bit.
+
 6) Define new project name and click on `START IMPORT` button.
+
 7) After import task finish, you can view project and see follow datasets: `train480p`, `train1080p`, `trainval480p`, `trainval1080p`, `val480p`, `val1080p`.
 
     ![](https://i.imgur.com/BZEBmCQ.png)
