@@ -8,7 +8,7 @@ from supervisely_lib.io.json import load_json_file
 
 def find_input_datasets():
     def flat_images_found(dir_path):
-        img_fnames = sly.fs.list_files(dir_path, sly.image.SUPPORTED_IMG_EXTS)
+        img_fnames = sly.fs.list_files(dir_path, filter_fn=sly.image.has_valid_ext)
         res = len(img_fnames) > 0
         return res
 
@@ -50,7 +50,7 @@ def convert():
     pr = sly.Project(os.path.join(sly.TaskPaths.RESULTS_DIR, task_settings['res_names']['project']),
                      sly.OpenMode.CREATE)
     for ds_name, ds_path in in_datasets:
-        img_paths = sly.fs.list_files(ds_path, sly.image.SUPPORTED_IMG_EXTS)
+        img_paths = sly.fs.list_files(ds_path, filter_fn=sly.image.has_valid_ext)
         sly.logger.info('Dataset {!r} contains {} image(s).'.format(ds_name, len(img_paths)))
         ds = pr.create_dataset(ds_name)
         progress = sly.Progress('Dataset: {!r}'.format(ds_name), len(img_paths))

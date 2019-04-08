@@ -17,9 +17,17 @@ def convert_video():
     else:
         sly.logger.warning('step parameter not found. set to default: {}'.format(DEFAULT_STEP))
 
-    video_paths = sly.fs.list_files(sly.TaskPaths.DATA_DIR, sly.video.ALLOWED_VIDEO_EXTENSIONS)
-    if len(video_paths) < 0:
-        raise RuntimeError("Videos not found")
+    paths = sly.fs.list_files(sly.TaskPaths.DATA_DIR)
+    video_paths = []
+    for path in paths:
+        if sly.video.has_valid_ext(path):
+            video_paths.append(path)
+        else:
+            sly.logger.warning("Video file '{}' has unsupported extension. Skipped. Supported extensions: {}"
+                               .format(path, sly.video.ALLOWED_VIDEO_EXTENSIONS))
+
+    if len(video_paths) == 0:
+        raise RuntimeError("Videos not found!")
 
     project_dir = os.path.join(sly.TaskPaths.RESULTS_DIR, task_settings['res_names']['project'])
     project = sly.Project(directory=project_dir, mode=sly.OpenMode.CREATE)
