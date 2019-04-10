@@ -28,8 +28,6 @@ class SaveMasksLayer(Layer):
             "settings": {
                 "type": "object",
                 "required": [
-                    "images",
-                    "annotations",
                     "masks_machine",
                     "masks_human"
                 ],
@@ -46,10 +44,10 @@ class SaveMasksLayer(Layer):
                             ".*": {"$ref": "#/definitions/color"}
                         }
                     },
-                    "images": {
+                    "images": {  # Deprecated
                         "type": "boolean"
                     },
-                    "annotations": {
+                    "annotations": {  # Deprecated
                         "type": "boolean"
                     },
                     "masks_machine": {
@@ -92,7 +90,7 @@ class SaveMasksLayer(Layer):
                     raise ValueError("Color mapping {} required if {} is true.".format(mapping_name, flag_name))
                 # @TODO: maybe check if all classes are present
 
-        target_arr = ['images', 'annotations', 'masks_machine', 'masks_human']
+        target_arr = ['masks_machine', 'masks_human']
         target_determ = any((self.settings[x] for x in target_arr))
         if not target_determ:
             raise ValueError("Some output target ({}) should be set to true.".format(', '.join(target_arr)))
@@ -101,6 +99,11 @@ class SaveMasksLayer(Layer):
         self.net = net
 
         self.out_project = sly.Project(directory=output_folder, mode=sly.OpenMode.CREATE)
+
+        # Deprecate warning
+        for param in ['images', 'annotations']:
+            if param in self.settings:
+                sly.logger.warning("'save_masks' layer: '{}' parameter is deprecated. Skipped.".format(param))
 
     def is_archive(self):
         return True
@@ -140,12 +143,9 @@ class SaveMasksLayer(Layer):
             os_utils.ensure_base_path(output_img_path)
             cv2.imwrite(output_img_path, img)
 
-        if self.settings['annotations'] is True:
-            ann_to_save = deepcopy(ann)
-            ann_to_save.normalize_figures()
-            packed_ann = ann_to_save.pack()
-        else:
-            packed_ann = None
+        ann_to_save = deepcopy(ann)
+        ann_to_save.normalize_figures()
+        packed_ann = ann_to_save.pack()
 
         dataset_name = img_desc.get_res_ds_name()
         if not self.out_project.datasets.has_key(dataset_name):
@@ -153,12 +153,11 @@ class SaveMasksLayer(Layer):
         out_dataset = self.out_project.datasets.get(dataset_name)
 
         out_item_name = free_name + img_desc.get_image_ext()
-        # net _always_ downloads images
-        if self.settings['images']:
-            if img_desc.need_write():
-                out_dataset.add_item_np(out_item_name, img_desc.image_data, ann=packed_ann)
-            else:
-                out_dataset.add_item_file(out_item_name, img_desc.get_img_path(), ann=packed_ann)
 
+        # net _always_ downloads images
+        if img_desc.need_write():
+            out_dataset.add_item_np(out_item_name, img_desc.image_data, ann=packed_ann)
+        else:
+            out_dataset.add_item_file(out_item_name, img_desc.get_img_path(), ann=packed_ann)
 
         yield ([img_desc, ann],)

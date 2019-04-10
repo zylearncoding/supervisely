@@ -15,6 +15,7 @@ from Layer import Layer
 
 import supervisely_lib as sly
 
+
 # save to archive
 class SaveLayer(Layer):
 
@@ -25,12 +26,11 @@ class SaveLayer(Layer):
         "properties": {
             "settings": {
                 "type": "object",
-                "required": ["images", "annotations"],
                 "properties": {
-                    "images": {
+                    "images": {  # Deprecated
                         "type": "boolean"
                     },
-                    "annotations": {
+                    "annotations": {  # Deprecated
                         "type": "boolean"
                     },
                     "visualize": {
@@ -61,12 +61,14 @@ class SaveLayer(Layer):
 
     def __init__(self, config, output_folder, net):
         Layer.__init__(self, config)
-        if not self.settings['images'] and not self.settings['annotations']:
-            raise ValueError("images or annotations should be set to true")
-
         self.output_folder = output_folder
         self.net = net
         self.out_project = sly.Project(directory=output_folder, mode=sly.OpenMode.CREATE)
+
+        # Deprecate warning
+        for param in ['images', 'annotations']:
+            if param in self.settings:
+                sly.logger.warning("'save' layer: '{}' parameter is deprecated. Skipped.".format(param))
 
     def is_archive(self):
         return True
@@ -108,12 +110,9 @@ class SaveLayer(Layer):
             os_utils.ensure_base_path(output_img_path)
             cv2.imwrite(output_img_path, img)
 
-        if self.settings['annotations'] is True:
-            ann_to_save = deepcopy(ann)
-            ann_to_save.normalize_figures()
-            packed_ann = ann_to_save.pack()
-        else:
-            packed_ann = None
+        ann_to_save = deepcopy(ann)
+        ann_to_save.normalize_figures()
+        packed_ann = ann_to_save.pack()
 
         dataset_name = img_desc.get_res_ds_name()
         if not self.out_project.datasets.has_key(dataset_name):
@@ -121,11 +120,11 @@ class SaveLayer(Layer):
         out_dataset = self.out_project.datasets.get(dataset_name)
 
         out_item_name = free_name + img_desc.get_image_ext()
+
         # net _always_ downloads images
-        if self.settings['images']:
-            if img_desc.need_write():
-                out_dataset.add_item_np(out_item_name, img_desc.image_data, ann=packed_ann)
-            else:
-                out_dataset.add_item_file(out_item_name, img_desc.get_img_path(), ann=packed_ann)
+        if img_desc.need_write():
+            out_dataset.add_item_np(out_item_name, img_desc.image_data, ann=packed_ann)
+        else:
+            out_dataset.add_item_file(out_item_name, img_desc.get_img_path(), ann=packed_ann)
 
         yield ([img_desc, ann],)
