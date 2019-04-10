@@ -76,9 +76,14 @@ def main():
 
     logger.info('DTL started')
     helper = DtlHelper()
-    net = Net(helper.graph, helper.in_project_metas, helper.paths.results_dir)
-    helper.save_res_meta(net.get_result_project_meta())
-    datasets_conflict_map = calculate_datasets_conflict_map(helper)
+
+    try:
+        net = Net(helper.graph, helper.in_project_metas, helper.paths.results_dir)
+        helper.save_res_meta(net.get_result_project_meta())
+        datasets_conflict_map = calculate_datasets_conflict_map(helper)
+    except Exception as e:
+        logger.error("Error occurred on DTL-graph initialization step!")
+        raise e
 
     # is_archive = net.is_archive()
     results_counter = 0

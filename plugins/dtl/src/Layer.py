@@ -208,7 +208,7 @@ class Layer:
             res_meta.img_tags.update(new_imtags)
             self.output_meta = res_meta
         except Exception as e:
-            print(self._config)
+            logger.error("Meta-error occurred in layer '{}' with config: {}".format(self.action, self._config))
             raise e
 
         return self.output_meta
