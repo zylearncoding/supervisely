@@ -19,8 +19,6 @@ instance and offline on your machine.
 
    ![Run notebook on web instance](_img/supervisely-notebook-run.png)
   
-sdfw
-
 ### Running offline on your machine
 
 You need to have Docker installed on your machine.
@@ -31,28 +29,42 @@ You need to have Docker installed on your machine.
     git clone https://github.com/supervisely/supervisely.git
     ```
 
-2. Start a docker image with all the pre-requisites and mount the necessary
+2. Look up your personal access token in the Supervisely web instance UI. Go to
+   the account settings (click your name in the top-right corner and select 
+   "account settings":
+
+    ![](_img/user-account-settings.png)
+
+    Then select the "API token" tab on top:
+
+    ![](_img/user-api-token.png)
+
+    Copy your API token and plug it into the shell command on the next step.
+
+3. Start a docker image with all the pre-requisites and mount the necessary
    source directories from our repo:
 
    ```
    docker run \
        --rm -ti \
        --network host \
+       -e SERVER_ADDRESS='https://app.supervise.ly' \
+       -e API_TOKEN='<PASTE YOUR PERSONAL API TOKEN>' \
        -v `pwd`/supervisely/supervisely_lib:/workdir/supervisely_lib \
        -v `pwd`/supervisely/help/jupyterlab_scripts/src:/workdir/src \
        supervisely/jupyterlab:latest
    ```
 
-3. Start up a Jupyter server within the running docker image:
+4. Start up a Jupyter server within the running docker image:
 
-  ```
-  jupyter notebook --allow-root --ip 0.0.0.0
-  ```
+    ```
+    jupyter notebook --allow-root --ip 0.0.0.0
+    ```
 
-4. Open the displayed URL in the browser (use 127.0.0.1 as a host):
+5. Open the displayed URL in the browser (use 127.0.0.1 as a host):
 
     ![Open this URL to access Jupyter notebooks locally](./_img/local-jupyter-url.png)
 
-5. Navigate to the notebook you need and launch it:
+6. Navigate to the notebook you need and launch it:
 
     ![Run notebook locally](./_img/run-notebook-locally.png)

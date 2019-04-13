@@ -1,11 +1,8 @@
 # coding: utf-8
 
-import os
-from os.path import join
-
 import supervisely_lib as sly
 from supervisely_lib.nn import config as sly_nn_config
-from darknet_utils import load_net, detect_pyimage
+from darknet_utils import detect_pyimage
 
 
 def class_to_idx_config_key():
@@ -39,31 +36,6 @@ def yolo_preds_to_sly_rects(detections, idx_to_class, confidence_tag_meta):
             label = label.add_tag(confidence_tag)
             labels.append(label)
     return labels
-
-
-def construct_model(model_dir):
-    src_train_cfg_path = join(model_dir, 'model.cfg')
-    with open(src_train_cfg_path) as f:
-        src_config = f.readlines()
-
-    def repl_batch(row):
-        if 'batch=' in row:
-            return 'batch=1\n'
-        if 'subdivisions=' in row:
-            return 'subdivisions=1\n'
-        return row
-
-    changed_config = [repl_batch(x) for x in src_config]
-
-    inf_cfg_path = join(model_dir, 'inf_model.cfg')
-    if not os.path.exists(inf_cfg_path):
-        with open(inf_cfg_path, 'w') as f:
-            f.writelines(changed_config)
-
-    model = load_net(inf_cfg_path.encode('utf-8'),
-                        join(model_dir, 'model.weights').encode('utf-8'),
-                        0)
-    return model
 
 
 def infer_on_image(image, model, idx_to_class, confidence_thresh, confidence_tag_meta, num_classes):

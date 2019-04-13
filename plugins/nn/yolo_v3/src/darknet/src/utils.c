@@ -999,5 +999,7 @@ void train_supervisely( char *cfgfile, char *weightfile,
             }
         }
     }
+    pthread_join(vload_thread, 0);
+    pthread_join(load_thread, 0);
     printf("Ok, training is finished.\nGood luck.\n");
 }

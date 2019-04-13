@@ -14,7 +14,8 @@ from supervisely_lib.nn.hosted.class_indexing import CONTINUE_TRAINING, TRANSFER
 
 import common
 from dataset_utils import load_dataset
-from yolo_config_utils import load_config, refact_yolo_config, save_config
+from yolo_config_utils import find_data_item, read_config, replace_config_section_values, write_config, MODEL_CFG, \
+    CONVOLUTIONAL_SECTION, NET_SECTION, YOLO_SECTION
 from ctypes_utils import train_yolo, int1D_to_p_int, float2D_to_pp_float, string_list_pp_char
 
 from supervisely_lib.nn.hosted.trainer import SuperviselyModelTrainer
@@ -52,8 +53,6 @@ class YOLOTrainer(SuperviselyModelTrainer):
             },
             'weights_init_type': TRANSFER_LEARNING,  # CONTINUE_TRAINING,
         }
-
-    base_yolo_config_path = '/workdir/src/yolov3_base.cfg'
 
     def __init__(self):
         super().__init__(default_config=YOLOTrainer.get_default_config())
@@ -110,15 +109,35 @@ class YOLOTrainer(SuperviselyModelTrainer):
         src_size = self.config['input_size']
         input_size = (src_size['height'], src_size['width'])
 
-        yolo_config_base = load_config(self.base_yolo_config_path)
+        yolo_config = read_config(os.path.join(sly.TaskPaths.MODEL_DIR, MODEL_CFG))
+        [net_config] = [section for section in yolo_config if section.name == NET_SECTION]
+        net_overrides = {
+            'height': input_size[0],
+            'width': input_size[1],
+            'batch': self.config['batch_size']['train'],
+            'subdivisions': self.config['subdivisions']['train'],
+            'learning_rate': self.config['lr']
+        }
+        replace_config_section_values(net_config, net_overrides)
 
-        self.yolo_config = refact_yolo_config(yolo_config_base,
-                                              input_size,
-                                              self.config['batch_size']['train'],
-                                              self.config['subdivisions']['train'],
-                                              len(self.out_classes),
-                                              self.config['lr'])
-        save_config(self.yolo_config, '/tmp/model.cfg')
+        for section_idx, section in enumerate(yolo_config):
+            if section.name == YOLO_SECTION:
+                no_preceding_conv_section_msg = ('Unexpectedly found {!r} section in the config without immediately '
+                                                 'preceding {!r} section.'.format(YOLO_SECTION, CONVOLUTIONAL_SECTION))
+                if section_idx == 0:
+                    raise ValueError(no_preceding_conv_section_msg)
+                last_convolution = yolo_config[section_idx - 1]
+                if last_convolution.name != CONVOLUTIONAL_SECTION:
+                    raise ValueError(no_preceding_conv_section_msg)
+
+                classes_item = find_data_item(section, 'classes')
+                classes_item[1] = len(self.out_classes)
+
+                filters_item = find_data_item(last_convolution, 'filters')
+                filters_item[1] = (len(self.out_classes) + 5) * 3
+
+        self._effective_model_cfg_path = os.path.join('/tmp', MODEL_CFG)
+        write_config(yolo_config, self._effective_model_cfg_path)
         logger.info('Model config created.')
 
     def _define_initializing_params(self):
@@ -137,13 +156,13 @@ class YOLOTrainer(SuperviselyModelTrainer):
             if wi_type == TRANSFER_LEARNING:
                 self.layer_cutoff = 80  # fixed for the yolo_v3
             elif wi_type == CONTINUE_TRAINING:
-                self.layer_cutoff = 0   # load weights for all given layers
+                self.layer_cutoff = 0  # load weights for all given layers
 
     def _create_checkpoints_dir(self):
         for epoch in range(self.config['epochs']):
             checkpoint_dir = os.path.join(sly.TaskPaths.RESULTS_DIR, '{:08}'.format(epoch))
             sly.fs.mkdir(checkpoint_dir)
-            save_config(self.yolo_config, os.path.join(checkpoint_dir, 'model.cfg'))
+            sly.fs.copy_file(self._effective_model_cfg_path, os.path.join(checkpoint_dir, MODEL_CFG))
             with open(os.path.join(checkpoint_dir, sly.TaskPaths.MODEL_CONFIG_NAME), 'w') as fout:
                 json.dump(self.out_config, fout)
 
