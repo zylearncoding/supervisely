@@ -8,22 +8,22 @@
         "height": 256
       },
       "batch_size": {
-        "train": 12,
-        "val": 6
+        "train": 1,
+        "val": 1
       },
       "dataset_tags": {
         "train": "train",
         "val": "val"
       },
       "data_workers": {
-        "train": 3,
-        "val": 0
+        "train": 1,
+        "val": 1
       },
       "special_classes": {
         "background": "bg",
         "neutral": "neutral"
       },
-      "epochs": 3,
+      "epochs": 5,
       "val_every": 0.5,
       "lr": 0.001,
       "gpu_devices": [

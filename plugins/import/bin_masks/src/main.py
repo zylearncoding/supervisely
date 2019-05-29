@@ -82,11 +82,9 @@ def convert():
     for img_fp in images_pathes:
         full_img_fp = join(img_dir, img_fp)
         try:
-            image = read_image_pillow(full_img_fp)
             image_name = os.path.basename(full_img_fp)
             sample_name = sly.fs.get_file_name(full_img_fp)
-
-            ann = sly.Annotation(image.shape[:2])
+            ann = sly.Annotation.from_img_path(full_img_fp)
             mask_name = masks_map.pop(sample_name, None)
             if mask_name is None:
                 sly.logger.warning('Mask for image {} doesn\'t exist.'.format(sample_name))
@@ -95,7 +93,7 @@ def convert():
                 labels = read_mask_labels(full_mask_fp, classes_mapping, obj_class_collection)
                 ann = ann.add_labels(labels)
 
-            ds.add_item_np(image_name, image, ann=ann)
+            ds.add_item_file(image_name, full_img_fp, ann=ann)
         except Exception as e:
             exc_str = str(e)
             sly.logger.warn('Input sample skipped due to error: {}'.format(exc_str), exc_info=True, extra={
