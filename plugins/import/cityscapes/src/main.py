@@ -16,7 +16,7 @@ class AnnotationConvertionException(Exception):
 
 class ImporterCityscapes:
     def __init__(self):
-        self.settings = json.load(open(sly.TaskPaths.SETTINGS_PATH))
+        self.settings = json.load(open(sly.TaskPaths.TASK_CONFIG_PATH))
         self.obj_classes = sly.ObjClassCollection()
         self.tag_metas = sly.TagMetaCollection()
 

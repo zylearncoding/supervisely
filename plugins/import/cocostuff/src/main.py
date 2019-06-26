@@ -101,7 +101,7 @@ def get_ann(img_path, inst_path, number_class, pixel_color):
 
 
 def convert():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     imgs_dir = sly.TaskPaths.DATA_DIR
     inst_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'stuffthingmaps_trainval2017')
     labels = os.path.join(sly.TaskPaths.DATA_DIR, 'labels.txt')

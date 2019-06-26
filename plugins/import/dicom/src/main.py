@@ -4,8 +4,10 @@ import os
 import json
 import glob
 import cv2
-import pydicom
 import numpy as np
+
+import pydicom
+from pydicom.multival import MultiValue
 
 import supervisely_lib as sly
 
@@ -42,12 +44,49 @@ def get_tags_from_dicom_object(dicom_obj, requested_tags):
     return results
 
 
-def prepare_dicom_image(image):
-    # DICOM image brightness may has range [0...2000] and we need to translate it to [0..255]
-    image = (image / (image.mean() / 128.0)).clip(0, 255).astype(np.uint8)
-    if len(image.shape) == 2:
-        image = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
-    return image
+def get_rescale_params(ds):
+    """
+    For pixels brightness scale and offset.
+    """
+    rescale_intercept = getattr(ds, 'RescaleIntercept', 0.0)
+    rescale_slope = getattr(ds, 'RescaleSlope', 1.0)
+    return rescale_intercept, rescale_slope
+
+
+def get_LUT_value(data, window, level, rescale_intercept=0, rescale_slope=1):
+    if isinstance(window, list) or isinstance(window, MultiValue):
+        window = window[0]
+    if isinstance(level, list) or isinstance(level, MultiValue):
+        level = int(level[0])
+
+    # some vendors use wrong rescale intercept and slope?
+    if rescale_slope == 0 and rescale_intercept == 1:
+        rescale_slope = 1
+        rescale_intercept = 0
+
+    m_w = window - 1
+    m_l = level - 0.5
+
+    rescaled_data = (data * rescale_slope) + rescale_intercept
+    cond_list = [rescaled_data <= (m_l - m_w / 2), rescaled_data > (m_l + m_w / 2)]
+    func_list = [0, 255, lambda v: ((v - m_l) / m_w + 0.5) * (255 - 0)]
+    return np.piecewise(rescaled_data, cond_list, func_list)
+
+
+def prepare_dicom_image(im_arr, dicom_obj):
+    try:  # In some DICOM files, necessary attributes are lost.
+        rescale_intercept, rescale_slope = get_rescale_params(dicom_obj)
+        img = get_LUT_value(im_arr, dicom_obj.WindowWidth, dicom_obj.WindowCenter, rescale_intercept, rescale_slope)
+        img = img.astype(np.uint8)
+    except AttributeError:  # Common approach
+        img = im_arr.astype(np.float32)
+        img = np.round(255.0 / img.max() * img)
+        img = img.clip(0, 255)
+        img = img.astype(np.uint8)
+
+    if len(img.shape) == 2:
+        img = cv2.cvtColor(img, cv2.COLOR_GRAY2BGR)
+    return img
 
 
 def extract_images_from_dicom(dicom_obj):
@@ -55,14 +94,14 @@ def extract_images_from_dicom(dicom_obj):
     images = []
     if (len(dcm_channels) > 3 and dcm_channels[-1] == 3) or (len(dcm_channels) == 3 and dcm_channels[-1] != 3):
         for i in range(dcm_channels[0]):
-            images.append(prepare_dicom_image(dicom_obj.pixel_array[i]))
+            images.append(prepare_dicom_image(dicom_obj.pixel_array[i], dicom_obj))
     else:
-        images.append(prepare_dicom_image(dicom_obj.pixel_array))
+        images.append(prepare_dicom_image(dicom_obj.pixel_array, dicom_obj))
     return images
 
 
 def convert():
-    settings = json.load(open(sly.TaskPaths.SETTINGS_PATH))
+    settings = json.load(open(sly.TaskPaths.TASK_CONFIG_PATH))
     tag_metas = sly.TagMetaCollection()
 
     out_project = sly.Project(os.path.join(sly.TaskPaths.RESULTS_DIR, settings['res_names']['project']), sly.OpenMode.CREATE)
@@ -122,6 +161,9 @@ def convert():
             dataset_progress.iter_done_report()
 
     sly.logger.info('Processed.', extra={'samples': samples_count, 'skipped': skipped_count})
+
+    if out_project.total_items == 0:
+        raise RuntimeError('Result project is empty! All input DICOM files have unreadable format!')
 
     out_meta = sly.ProjectMeta(tag_metas=tag_metas)
     out_project.set_meta(out_meta)

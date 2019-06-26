@@ -2,14 +2,15 @@ import os
 import supervisely_lib as sly
 from supervisely_lib.nn.dataset import partition_train_val
 
-WORKSPACE_ID = %%WORKSPACE_ID%%
+WORKSPACE_ID = int('%%WORKSPACE_ID%%')
 src_project_name = '%%IN_PROJECT_NAME%%'
+src_dataset_ids = %%DATASET_IDS:None%%
 dst_project_name = '%%OUT_PROJECT_NAME%%'
 
 api = sly.Api(server_address=os.environ['SERVER_ADDRESS'], token=os.environ['API_TOKEN'])
 
 # Which fraction of images to tag as a validation set (remaining are tagged as training set).
-validation_fraction = %%validation_fraction:0.1%%
+validation_fraction = float('%%validation_fraction:0.1%%')
 
 train_tag_name = '%%train_tag_name:train%%'
 val_tag_name = '%%val_tag_name:val%%'
@@ -35,14 +36,18 @@ dst_meta = src_meta.add_tag_metas([tag_meta_train, tag_meta_val])
 dst_project = api.project.create(WORKSPACE_ID, dst_project_name, change_name_if_conflict=True)
 api.project.update_meta(dst_project.id, dst_meta.to_json())
 
-total_images = api.project.get_images_count(src_project.id)
+src_dataset_infos = (
+    [api.dataset.get_info_by_id(ds_id) for ds_id in src_dataset_ids] if (src_dataset_ids is not None)
+    else api.dataset.get_list(src_project.id))
+total_images = sum(ds_info.images_count for ds_info in src_dataset_infos)
+
 if total_images <= 1:
     raise RuntimeError('Need at least 2 images in a project to prepare a training set (at least 1 each for training '
                        'and validation).')
 is_train_image = partition_train_val(total_images, validation_fraction)
 
 batch_start_idx = 0
-for src_dataset in api.dataset.get_list(src_project.id):
+for src_dataset in src_dataset_infos:
     dst_dataset = api.dataset.create(dst_project.id, src_dataset.name, src_dataset.description)
     images = api.image.get_list(src_dataset.id)
     ds_progress = sly.Progress(

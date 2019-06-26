@@ -5,14 +5,10 @@ import numpy as np
 
 from tensorflow.python.framework import dtypes
 from object_detection.core import standard_fields as fields
+
 from supervisely_lib.annotation.annotation import Annotation
 from supervisely_lib.io.json import load_json_file
-
-
-def read_images_from_disk(img_path):
-    file_contents = tf.read_file(img_path)
-    example = tf.image.decode_png(file_contents, channels=3)  # @TODO: test decode_image
-    return example
+from supervisely_lib.imaging import image as sly_image
 
 
 def get_bbox(mask):
@@ -39,16 +35,21 @@ def load_ann(ann_fpath, classes_mapping, project_meta):
             classes_text.append(label.obj_class.name.encode('utf8'))
             # List of string class name of bounding box (1 per box)
             classes.append(gt_idx)  # List of integer class id of bounding box (1 per box)
-    num_boxes = len(gt_boxes)  # ops.convert_to_tensor(len(gt_boxes), dtype=dtypes.int32)
-    # gt_boxes = ops.convert_to_tensor(gt_boxes, dtype=dtypes.float32)
-    # classes = ops.convert_to_tensor(classes, dtype=dtypes.int64)
-    return np.array(gt_boxes).astype('float32'), classes, np.array([num_boxes]).astype('int32')[0]
+    num_boxes = len(gt_boxes)
+    gt_boxes = np.array(gt_boxes).astype(np.float32)
+    classes = np.array(classes, dtype=np.int64)
+    if num_boxes == 0:
+        gt_boxes = np.reshape(gt_boxes, [0,4])
+    return gt_boxes, classes, np.array([num_boxes]).astype(np.int32)[0]
 
 
 def read_supervisely_data(sample, classes_mapping, project_meta):
     img_filepath, ann_filepath = sample[0], sample[1]
 
-    image = read_images_from_disk(img_filepath)
+    def read_image_fn(img_path_bytes):
+        return sly_image.read(img_path_bytes.decode('utf-8'))
+
+    image = tf.py_func(read_image_fn, [img_filepath], dtypes.uint8, stateful=False)
     train_tensor = dict()
 
     def load_ann_fn(x):

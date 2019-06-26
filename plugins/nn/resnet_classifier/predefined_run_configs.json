@@ -50,6 +50,10 @@
         "model_classes": {
           "save_classes": "__all__",
           "add_suffix": "_resnet"
+        },
+        "model_tags": {
+          "save_names": "__all__",
+          "add_suffix": "_resnet"
         }
       }
     }
@@ -75,6 +79,10 @@
         "model_classes": {
           "save_classes": "__all__",
           "add_suffix": "_resnet"
+        },
+        "model_tags": {
+          "save_names": "__all__",
+          "add_suffix": "_resnet"
         }
       }
     }
@@ -98,6 +106,10 @@
         "class_name": "inference_roi",
         "model_classes": {
           "save_classes": "__all__",
+          "add_suffix": "_resnet"
+        },
+        "model_tags": {
+          "save_names": "__all__",
           "add_suffix": "_resnet"
         }
       }

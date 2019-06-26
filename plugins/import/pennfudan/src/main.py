@@ -44,7 +44,7 @@ def get_ann(img_path, inst_path, number_class, pixel_color):
 
 
 def convert():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     all_img = os.path.join(sly.TaskPaths.DATA_DIR, 'PennFudanPed/PNGImages')
     all_ann = os.path.join(sly.TaskPaths.DATA_DIR, 'PennFudanPed/PedMasks')
     out_project = sly.Project(os.path.join(sly.TaskPaths.RESULTS_DIR, settings['res_names']['project']),

@@ -1,11 +1,11 @@
 # coding: utf-8
 
 import json
+
 import os
 import os.path as osp
 
 import cv2
-import numpy as np
 
 import supervisely_lib as sly
 import supervisely_lib.nn.dataset
@@ -133,9 +133,15 @@ class ObjectDetectionTrainer(SuperviselyModelTrainer):
                 "sample_cnt": len(samples_lst)
             }
             self.tf_data_dicts[the_name] = dataset_dict
-            self.iters_cnt[the_name] = \
-                np.ceil(float(len(samples_lst)) /
-                        (self.config['batch_size'][the_name] * len(self.config['gpu_devices']))).astype('int')
+            num_gpu_devices = len(self.config['gpu_devices'])
+            single_gpu_batch_size = self.config['batch_size'][the_name]
+            effective_batch_size = single_gpu_batch_size * num_gpu_devices
+            if len(samples_lst) < effective_batch_size:
+                raise RuntimeError(f'Not enough items in the {the_name!r} fold (tagged {the_tag!r}). There are only '
+                                   f'{len(samples_lst)} items, but the effective batch size is {effective_batch_size} '
+                                   f'({num_gpu_devices} GPU devices X {single_gpu_batch_size} single GPU vatch size).')
+
+            self.iters_cnt[the_name] = len(samples_lst) // effective_batch_size
             logger.info('Prepared dataset.', extra={
                 'dataset_purpose': the_name, 'dataset_tag': the_tag, 'sample_cnt': len(samples_lst)
             })

@@ -2,8 +2,9 @@ import json
 import os
 import supervisely_lib as sly
 
-WORKSPACE_ID = %%WORKSPACE_ID%%
+WORKSPACE_ID = int('%%WORKSPACE_ID%%')
 src_project_name = '%%IN_PROJECT_NAME%%'
+src_dataset_ids = %%DATASET_IDS:None%%
 
 api = sly.Api(server_address=os.environ['SERVER_ADDRESS'], token=os.environ['API_TOKEN'])
 
@@ -21,7 +22,11 @@ with open(os.path.join(dest_dir, 'meta.json'), 'w') as fout:
     json.dump(meta_json, fout, indent=2)
 
 total_images = 0
-for dataset in api.dataset.get_list(project.id):
+src_dataset_infos = (
+    [api.dataset.get_info_by_id(ds_id) for ds_id in src_dataset_ids] if (src_dataset_ids is not None)
+    else api.dataset.get_list(project.id))
+
+for dataset in src_dataset_infos:
     ann_dir = os.path.join(dest_dir, dataset.name, 'ann')
     sly.fs.mkdir(ann_dir)
 

@@ -63,7 +63,7 @@ def get_ann(img_path, inst_path):
 
 
 def convert():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     imgs_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'JPEGImages')
     inst_dir_trainval = os.path.join(sly.TaskPaths.DATA_DIR, 'Annotations_Part')
     out_project = sly.Project(os.path.join(sly.TaskPaths.RESULTS_DIR, settings['res_names']['project']), sly.OpenMode.CREATE)

@@ -6,6 +6,7 @@
       "iou": 0.5,
       "project_gt": "pr1_title",
       "project_pred": "pr2_title",
+      "confidence_tag_name": "confidence",
       "classes_mapping": {
         "class_0": "class_0_pred",
         "class_1": "class_1_pred"
@@ -18,6 +19,7 @@
     "config": {
       "iou": 0.5,
       "project_gt": "pr1_title",
+      "confidence_tag_name": "confidence",
       "classes_mapping": {
         "class_0": "class_0_pred",
         "class_1": "class_1_pred"

@@ -9,7 +9,7 @@ from supervisely_lib.io.json import load_json_file
 
 
 def main():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     sly.logger.info('Input settings:', extra={'config': settings})
 
     metric = ClassificationMetrics(settings[TAGS_MAPPING], settings[CONFIDENCE_THRESHOLD])

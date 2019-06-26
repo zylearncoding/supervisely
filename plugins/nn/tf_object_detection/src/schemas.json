@@ -94,22 +94,6 @@
       "validate_with_model_eval": {
         "type": "boolean"
       },
-      "special_classes": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "background",
-          "neutral"
-        ],
-        "properties": {
-          "background": {
-            "$ref": "#/definitions/nonempty_string"
-          },
-          "neutral": {
-            "$ref": "#/definitions/nonempty_string"
-          }
-        }
-      },
       "input_size": {
         "allOf": [
           {

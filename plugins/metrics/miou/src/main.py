@@ -9,7 +9,7 @@ import supervisely_lib as sly
 
 
 def main():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     sly.logger.info('Input settings:', extra={'config': settings})
 
     metric = IoUMetric(settings[CLASSES_MAPPING])

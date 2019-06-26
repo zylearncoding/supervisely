@@ -47,7 +47,7 @@ def get_ann(img_path, inst_path, default_classes_colors):
 
 
 def convert():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     out_project = sly.Project(os.path.join(sly.TaskPaths.RESULTS_DIR, settings['res_names']['project']),
                               sly.OpenMode.CREATE)
     all_img = os.path.join(sly.TaskPaths.DATA_DIR, 'bdd100k/seg/images')

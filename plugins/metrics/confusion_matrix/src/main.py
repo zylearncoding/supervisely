@@ -10,7 +10,7 @@ from supervisely_lib.metric.iou_metric import IOU
 
 
 def main():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     sly.logger.info('Input settings:', extra={'config': settings})
 
     if IOU not in settings:

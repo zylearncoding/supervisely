@@ -56,7 +56,7 @@ def get_ann(img_path, inst_path):
 
 
 def convert():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     lists_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'DAVIS/ImageSets')
     imgs_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'DAVIS/JPEGImages')
     inst_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'DAVIS/Annotations')

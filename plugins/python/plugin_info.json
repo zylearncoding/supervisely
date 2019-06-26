@@ -1,5 +1,5 @@
 {
-	"title": "Python tasks runner",
-	"description": "Python tasks yada yada",
-	"type": "python"
+  "title": "Python tasks runner",
+  "description": "This plugin is used to run custom user-specified Python code on the agent.",
+  "type": "python"
 }

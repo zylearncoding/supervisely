@@ -21,10 +21,6 @@
         "val": "val",
         "train": "train"
       },
-      "special_classes": {
-        "neutral": "neutral",
-        "background": "bg"
-      },
       "weights_init_type": "transfer_learning"
     }
   },
@@ -50,10 +46,6 @@
         "val": "val",
         "train": "train"
       },
-      "special_classes": {
-        "neutral": "neutral",
-        "background": "bg"
-      },
       "weights_init_type": "transfer_learning"
     }
   },
@@ -69,6 +61,10 @@
         "name": "full_image",
         "model_classes": {
           "save_classes": "__all__",
+          "add_suffix": "_tf"
+        },
+        "model_tags": {
+          "save_names": "__all__",
           "add_suffix": "_tf"
         }
       }
@@ -95,6 +91,10 @@
         "model_classes": {
           "save_classes": "__all__",
           "add_suffix": "_tf"
+        },
+        "model_tags": {
+          "save_names": "__all__",
+          "add_suffix": "_tf"
         }
       }
     }
@@ -120,6 +120,10 @@
         "add_suffix": "_input_bbox",
         "model_classes": {
           "save_classes": "__all__",
+          "add_suffix": "_tf"
+        },
+        "model_tags": {
+          "save_names": "__all__",
           "add_suffix": "_tf"
         }
       }
@@ -152,7 +156,11 @@
         },
         "model_classes": {
           "save_classes": "__all__",
-          "add_suffix": "_nn"
+          "add_suffix": "_tf"
+        },
+        "model_tags": {
+          "save_names": "__all__",
+          "add_suffix": "_tf"
         }
       }
     }

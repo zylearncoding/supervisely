@@ -26,8 +26,13 @@ class FigureRectangle(AbstractVectorFigure):
         self._set_points(self._exterior_from_rect(clipped))
         return [self]
 
-    def rotate(self, _):
-        raise RuntimeError('Unable to rotate Rectangle figure.')
+    def rotate(self, rotator):
+        fn = rotator.transform_coords
+        src_bbox = self.get_bbox()
+        self.data['points']['exterior'] = src_bbox.to_np_points()
+        self.transform_points(fn)
+        dst_bbox = Rect.from_np_points(self.data['points']['exterior'])
+        self.data['points']['exterior'] = self._exterior_from_rect(dst_bbox)
 
     def get_bbox(self):
         pts = self.data['points']['exterior']

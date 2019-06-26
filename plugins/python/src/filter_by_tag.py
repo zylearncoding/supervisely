@@ -1,8 +1,9 @@
 import os
 import supervisely_lib as sly
 
-WORKSPACE_ID = %%WORKSPACE_ID%%
+WORKSPACE_ID = int('%%WORKSPACE_ID%%')
 src_project_name = '%%IN_PROJECT_NAME%%'
+src_dataset_ids = %%DATASET_IDS:None%%
 dst_project_name = '%%OUT_PROJECT_NAME%%'
 
 api = sly.Api(server_address=os.environ['SERVER_ADDRESS'], token=os.environ['API_TOKEN'])
@@ -44,7 +45,10 @@ src_meta = sly.ProjectMeta.from_json(src_meta_json)
 dst_project = api.project.create(WORKSPACE_ID, dst_project_name, change_name_if_conflict=True)
 api.project.update_meta(dst_project.id, src_meta_json)
 
-for src_dataset in api.dataset.get_list(src_project.id):
+src_dataset_infos = (
+    [api.dataset.get_info_by_id(ds_id) for ds_id in src_dataset_ids] if (src_dataset_ids is not None)
+    else api.dataset.get_list(src_project.id))
+for src_dataset in src_dataset_infos:
     dst_dataset = api.dataset.create(dst_project.id, src_dataset.name, src_dataset.description)
     images = api.image.get_list(src_dataset.id)
     ds_progress = sly.Progress(

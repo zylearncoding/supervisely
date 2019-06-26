@@ -17,14 +17,22 @@ import inference_lib
 import custom_config
 
 
+MIN_CONFIDENCE_THRESHOLD = 'min_confidence_threshold'
+
+
 class MaskRCNNSingleImageApplier(SingleImageInferenceBase):
 
     @staticmethod
     def get_default_config():
         return {
             GPU_DEVICE: 0,
-            'confidence_tag_name': CONFIDENCE
+            'confidence_tag_name': CONFIDENCE,
+            MIN_CONFIDENCE_THRESHOLD: 0.0
         }
+
+    def __init__(self, task_model_config=None):
+        super().__init__(task_model_config)
+        self._min_confidence_threshold = self._config[MIN_CONFIDENCE_THRESHOLD]
 
     @property
     def train_classes_key(self):
@@ -62,7 +70,8 @@ class MaskRCNNSingleImageApplier(SingleImageInferenceBase):
 
     def inference(self, image, ann):
         res_labels = inference_lib.infer_on_image(image, self.graph, self.model, self.idx_to_class_title,
-                                                  self.model_out_meta, self.confidence_tag_meta)
+                                                  self.model_out_meta, self.confidence_tag_meta,
+                                                  min_confidence=self._min_confidence_threshold)
         return Annotation(ann.img_size, labels=res_labels)
 
 

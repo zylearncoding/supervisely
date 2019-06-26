@@ -44,6 +44,10 @@
         "model_classes": {
           "save_classes": "__all__",
           "add_suffix": "_unet"
+        },
+        "model_tags": {
+          "save_names": "__all__",
+          "add_suffix": "_unet"
         }
       }
     }
@@ -67,6 +71,10 @@
         "class_name": "inference_roi",
         "model_classes": {
           "save_classes": "__all__",
+          "add_suffix": "_unet"
+        },
+        "model_tags": {
+          "save_names": "__all__",
           "add_suffix": "_unet"
         }
       }
@@ -93,6 +101,10 @@
         "model_classes": {
           "save_classes": "__all__",
           "add_suffix": "_unet"
+        },
+        "model_tags": {
+          "save_names": "__all__",
+          "add_suffix": "_unet"
         }
       }
     }
@@ -118,6 +130,10 @@
         "class_name": "sl_window",
         "model_classes": {
           "save_classes": "__all__",
+          "add_suffix": "_unet"
+        },
+        "model_tags": {
+          "save_names": "__all__",
           "add_suffix": "_unet"
         }
       }

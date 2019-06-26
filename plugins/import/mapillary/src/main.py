@@ -35,7 +35,7 @@ class InstanceIdToObjClass(collections.Mapping):
 class ImporterMapillary:
 
     def __init__(self):
-        self.settings = json.load(open(sly.TaskPaths.SETTINGS_PATH))
+        self.settings = json.load(open(sly.TaskPaths.TASK_CONFIG_PATH))
         self.colors_file = os.path.join(sly.TaskPaths.DATA_DIR, 'config.json')
         self.obj_classes = sly.ObjClassCollection()
         self._read_colors()

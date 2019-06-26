@@ -171,7 +171,7 @@
       "min_confidence_threshold": {
         "allOf": [
           {
-            "$ref": "#/definitions/positive_float"
+            "$ref": "#/definitions/nonnegative_float"
           },
           {
             "maximum": 1

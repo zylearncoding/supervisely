@@ -79,7 +79,7 @@ def get_ann(img_path, inst_path, number_class, pixel_color):
 
 
 def convert():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     imgs_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'JPEGImages')
     inst_dir_trainval = os.path.join(sly.TaskPaths.DATA_DIR, 'trainval')
     labels_file_path = os.path.join(sly.TaskPaths.DATA_DIR, 'labels.txt')

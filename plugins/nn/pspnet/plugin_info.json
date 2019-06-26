@@ -1,0 +1,5 @@
+{
+	"title": "PSPNet",
+	"description": "Tensorflow implementation of PSPNet",
+	"type": "architecture"
+}

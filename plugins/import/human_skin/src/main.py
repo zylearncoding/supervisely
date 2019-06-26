@@ -62,7 +62,7 @@ def get_ann(img_path, inst_path, default_classes_colors):
 
 
 def convert():
-    settings = load_json_file(sly.TaskPaths.SETTINGS_PATH)
+    settings = load_json_file(sly.TaskPaths.TASK_CONFIG_PATH)
     imgs_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'Pratheepan_Dataset')
     inst_dir = os.path.join(sly.TaskPaths.DATA_DIR, 'Ground_Truth')
     default_classes_colors = {'background': [1, 1, 1], 'skin': [255, 255, 255]}
