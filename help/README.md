@@ -8,6 +8,7 @@ For now we have the following resources available:
 * [Create a new Supervisely plugin](./tutorials/01_create_new_plugin/how_to_create_plugin.md)
 * [Easy guide: Integrate a custom Pytorch Segmentation neural network](./tutorials/02_pytorch_easy_segmentation_plugin/pytorch_segmentation_integration_template.md)
 * [General detailed guide: Integrate any custom neural network](./tutorials/03_custom_neural_net_plugin/custom_nn_plugin.md)
+* [Deploy neural network as API](./tutorials/04_deploy_neural_net_as_api/deploy-model.md)
 
 ### Python SDK tutorials and cookbooks
 
