@@ -39,7 +39,7 @@ for dataset in project:
         raw_img_rendered = raw_img.copy()
         for label in ann.labels:
             label.geometry.draw(raw_img_rendered,
-                                color=machine_colors[label.obj_class.name],
+                                color=label.obj_class.color,
                                 config=label.obj_class.geometry_config,
                                 thickness=thickness)
         raw_img_rendered = ((raw_img_rendered.astype(np.uint16) + raw_img.astype(np.uint16)) / 2).astype(np.uint8)
@@ -49,7 +49,7 @@ for dataset in project:
         # Render and save machine readable masks.
         machine_mask = np.zeros(shape=ann.img_size + (3,), dtype=np.uint8)
         for label in ann.labels:
-            label.geometry.draw(machine_mask, color=machine_colors[label.obj_class.name])
+            label.geometry.draw(machine_mask, color=machine_colors[label.obj_class.name], thickness=thickness)
         sly.image.write(os.path.join(machine_masks_dir, mask_img_name), machine_mask)
 
         ds_progress.iter_done_report()
