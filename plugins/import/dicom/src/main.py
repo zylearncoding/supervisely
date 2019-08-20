@@ -129,7 +129,7 @@ def convert():
                 tags_and_metas = get_tags_from_dicom_object(dicom_obj, requested_tags)
 
                 # Extract images (DICOM file may contain few images)
-                base_name = os.path.splitext(os.path.basename(dicom_filename))[0]
+                base_name = os.path.basename(dicom_filename)
                 images = extract_images_from_dicom(dicom_obj)
 
                 for image_index, image in enumerate(images):
