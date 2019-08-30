@@ -48,7 +48,7 @@ def convert():
         for img_path in img_paths:
             try:
                 item_name = os.path.basename(img_path)
-                ds.add_item_file(item_name, img_path)
+                ds.add_item_file(item_name, img_path, _use_hardlink=True)
             except Exception as e:
                 exc_str = str(e)
                 sly.logger.warn('Input sample skipped due to error: {}'.format(exc_str), exc_info=True, extra={

@@ -188,6 +188,9 @@
       "confidence_tag_name": {
         "type": "string"
       },
+      "num_processes": {
+        "$ref": "#/definitions/positive_int"
+      },
       "min_confidence_threshold": {
         "allOf": [
           {

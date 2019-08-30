@@ -22,7 +22,7 @@ def convert():
         'Project info: {} dataset(s), {} images(s).'.format(len(project.datasets), project.total_items))
     project.validate()
 
-    project.copy_data(sly.TaskPaths.RESULTS_DIR, task_settings['res_names']['project'])
+    project.copy_data(sly.TaskPaths.RESULTS_DIR, dst_name=task_settings['res_names']['project'], _use_hardlink=True)
 
 
 def main():

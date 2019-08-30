@@ -39,7 +39,8 @@
     "config": {
       "model": {
         "gpu_device": 0,
-        "confidence_tag_name": "confidence"
+        "confidence_tag_name": "confidence",
+        "num_processes": 1
       },
       "mode": {
         "name": "full_image",
@@ -60,7 +61,8 @@
     "config": {
       "model": {
         "gpu_device": 0,
-        "confidence_tag_name": "confidence"
+        "confidence_tag_name": "confidence",
+        "num_processes": 1
       },
       "mode": {
         "name": "roi",
@@ -89,7 +91,8 @@
     "config": {
       "model": {
         "gpu_device": 0,
-        "confidence_tag_name": "confidence"
+        "confidence_tag_name": "confidence",
+        "num_processes": 1
       },
       "mode": {
         "name": "bboxes",
@@ -119,7 +122,8 @@
     "config": {
       "model": {
         "gpu_device": 0,
-        "confidence_tag_name": "confidence"
+        "confidence_tag_name": "confidence",
+        "num_processes": 1
       },
       "mode": {
         "name": "sliding_window_det",

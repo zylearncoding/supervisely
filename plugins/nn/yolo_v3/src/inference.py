@@ -7,16 +7,20 @@ from darknet_utils import load_net
 import supervisely_lib as sly
 from supervisely_lib.nn.hosted.inference_single_image import SingleImageInferenceBase, GPU_DEVICE
 from supervisely_lib.nn.hosted.inference_batch import BatchInferenceApplier
+from supervisely_lib.nn.hosted.inference_batch_multiprocess import BatchInferenceMultiprocessApplier
 from supervisely_lib.nn.hosted.inference_modes import InfModeFullImage, CONFIDENCE
 import common
 from yolo_config_utils import read_config, replace_config_section_values, write_config, MODEL_CFG, NET_SECTION
 
 
+NUM_PROCESSES = 'num_processes'
+
+
 class YOLOSingleImageApplier(SingleImageInferenceBase):
 
-    def __init__(self, task_model_config=None):
+    def __init__(self, task_model_config=None, _load_model_weights=True):
         sly.logger.info('YOLOv3 inference init started.')
-        super().__init__(task_model_config)
+        super().__init__(task_model_config, _load_model_weights=_load_model_weights)
         self.confidence_thresh = self._config['min_confidence_threshold']
         sly.logger.info('YOLOv3 inference init done.')
 
@@ -25,7 +29,8 @@ class YOLOSingleImageApplier(SingleImageInferenceBase):
         return {
             'min_confidence_threshold': 0.5,
             GPU_DEVICE: 0,
-            'confidence_tag_name': CONFIDENCE
+            'confidence_tag_name': CONFIDENCE,
+            NUM_PROCESSES: 1
         }
 
     @property
@@ -74,11 +79,29 @@ class YOLOSingleImageApplier(SingleImageInferenceBase):
 
 
 def main():
-    single_image_applier = YOLOSingleImageApplier()
+    # Initially instantiate an inference applier without loading the weights.
+    # This will parse, merge and validate all the configs and let us know
+    # the number of inference processes to use.
+    single_image_applier = YOLOSingleImageApplier(_load_model_weights=False)
+    num_processes = single_image_applier._config[NUM_PROCESSES]
+
     default_inference_mode_config = InfModeFullImage.make_default_config(model_result_suffix='_yolo')
-    dataset_applier = BatchInferenceApplier(single_image_inference=single_image_applier,
-                                            default_inference_mode_config=default_inference_mode_config,
-                                            config_validator=common.YoloJsonConfigValidator())
+    config_validator = common.YoloJsonConfigValidator()
+    if num_processes == 1:
+        # Use the usual fully serial inference logic if only one inference process was requested.
+        single_image_applier._construct_and_fill_model()
+        dataset_applier = BatchInferenceApplier(single_image_inference=single_image_applier,
+                                                default_inference_mode_config=default_inference_mode_config,
+                                                config_validator=config_validator)
+    else:
+        # More than one inference process was requested - use the new parallelized logic.
+        def yolo_initializer():
+            return YOLOSingleImageApplier()
+
+        dataset_applier = BatchInferenceMultiprocessApplier(single_image_inference_initializer=yolo_initializer,
+                                                            num_processes=num_processes,
+                                                            default_inference_mode_config=default_inference_mode_config,
+                                                            config_validator=config_validator)
     dataset_applier.run_inference()
 
 

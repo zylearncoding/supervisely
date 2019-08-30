@@ -17,20 +17,18 @@ class WrongInputDataStructure(Exception):
 
 
 def get_datasets_names_and_paths():
-    search_path = os.path.join(sly.TaskPaths.DATA_DIR, '*')
-    folders_list = [f for f in glob.glob(search_path) if os.path.isdir(f)]
-    files_list = sly.fs.list_files(sly.TaskPaths.DATA_DIR)
-
-    if len(folders_list) > 0 and len(files_list) > 0:
-        raise WrongInputDataStructure('Allowed only list if DICOM files OR list of folders which contains DICOM files!'
-                                      'See DICOM plugin documentation!')
-    if len(files_list) > 0:
-        return [('ds', sly.TaskPaths.DATA_DIR)]
-
-    if len(folders_list) > 0:
-        return [(os.path.basename(ds_path), ds_path) for ds_path in folders_list]
-
-    raise WrongInputDataStructure('Input data not found!')
+    result = [(os.path.relpath(dir_name, sly.TaskPaths.DATA_DIR).replace('/', '__'), dir_name)
+              for dir_name, _, file_names in os.walk(sly.TaskPaths.DATA_DIR) if len(file_names) > 0]
+    all_ds_names = {x[0] for x in result}
+    for idx, ds_with_dir in enumerate(result):
+        if ds_with_dir[0] == '.':
+            for candidate_suffix in range(1, len(all_ds_names) + 2):
+                candidate_name = 'ds' + str(candidate_suffix)
+                if candidate_name not in all_ds_names:
+                    result[idx] = (candidate_name, ds_with_dir[1])
+                    break
+            break
+    return result
 
 
 def get_tags_from_dicom_object(dicom_obj, requested_tags):
@@ -113,12 +111,12 @@ def convert():
     skipped_count = 0
     samples_count = 0
 
-    for folder_name, folder_path in get_datasets_names_and_paths():
-        dataset = out_project.create_dataset(folder_name)
+    for ds_name, folder_path in get_datasets_names_and_paths():
+        dataset = None
 
         # Process all files in current folder
         filenames_in_folder = sly.fs.list_files(folder_path)
-        dataset_progress = sly.Progress('Dataset {!r}'.format(folder_name), len(filenames_in_folder))
+        dataset_progress = sly.Progress('Dataset {!r}'.format(ds_name), len(filenames_in_folder))
 
         for dicom_filename in filenames_in_folder:
             try:
@@ -147,13 +145,15 @@ def convert():
                             tag_metas = tag_metas.add(tag_meta)
 
                     # Save annotations
+                    if dataset is None:
+                        dataset = out_project.create_dataset(ds_name)
                     dataset.add_item_np(sample_name + '.png', image, ann=ann)
 
             except Exception as e:
                 exc_str = str(e)
                 sly.logger.warn('Input sample skipped due to error: {}'.format(exc_str), exc_info=True, extra={
                     'exc_str': exc_str,
-                    'dataset_name': folder_name,
+                    'dataset_name': ds_name,
                     'image_name': dicom_filename,
                 })
                 skipped_count += 1
