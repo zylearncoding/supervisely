@@ -1,0 +1,206 @@
+{
+  "definitions": {
+    "nonempty_string": {
+      "type": "string",
+      "minLength": 1
+    },
+    "positive_int": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "nonnegative_int": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "positive_float": {
+      "type": "number",
+      "minimum": 0,
+      "exclusiveMinimum": true
+    },
+    "nonnegative_float": {
+      "type": "number",
+      "minimum": 0
+    },
+    "positive_size": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "height"
+      ],
+      "properties": {
+        "width": {
+          "$ref": "#/definitions/positive_int"
+        },
+        "height": {
+          "$ref": "#/definitions/positive_int"
+        }
+      }
+    },
+    "gpu_devices_list": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/nonnegative_int"
+      },
+      "minItems": 1
+    }
+  },
+  "training_config": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "batch_size",
+      "bn_momentum",
+      "dataset_tags",
+      "data_workers",
+      "enable_augmentations",
+      "epochs",
+      "gpu_devices",
+      "input_size",
+      "lr",
+      "print_every_iter",
+      "subdivisions",
+      "weights_init_type"
+    ],
+    "properties": {
+      "batch_size": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "train",
+          "val"
+        ],
+        "properties": {
+          "train": {
+            "$ref": "#/definitions/positive_int"
+          },
+          "val": {
+            "$ref": "#/definitions/positive_int"
+          }
+        }
+      },
+      "bn_momentum": {
+        "$ref": "#/definitions/positive_float"
+      },
+      "dataset_tags": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "train",
+          "val"
+        ],
+        "properties": {
+          "train": {
+            "$ref": "#/definitions/nonempty_string"
+          },
+          "val": {
+            "$ref": "#/definitions/nonempty_string"
+          }
+        }
+      },
+      "data_workers": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "train",
+          "val"
+        ],
+        "properties": {
+          "train": {
+            "$ref": "#/definitions/positive_int"
+          },
+          "val": {
+            "$ref": "#/definitions/positive_int"
+          }
+        }
+      },
+      "enable_augmentations": {
+        "type": "boolean"
+      },
+      "epochs": {
+        "$ref": "#/definitions/positive_int"
+      },
+      "checkpoint_every": {
+        "$ref": "#/definitions/positive_int"
+      },
+      "gpu_devices": {
+        "$ref": "#/definitions/gpu_devices_list"
+      },
+      "input_size": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/positive_size"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "width": {
+                "multipleOf": 32
+              },
+              "height": {
+                "multipleOf": 32
+              }
+            }
+          }
+        ]
+      },
+      "lr": {
+        "$ref": "#/definitions/positive_float"
+      },
+      "print_every_iter": {
+        "$ref": "#/definitions/positive_int"
+      },
+      "subdivisions": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "train",
+          "val"
+        ],
+        "properties": {
+          "train": {
+            "$ref": "#/definitions/positive_int"
+          },
+          "val": {
+            "$ref": "#/definitions/positive_int"
+          }
+        }
+      },
+      "weights_init_type": {
+        "type": "string",
+        "enum": [
+          "transfer_learning",
+          "continue_training"
+        ]
+      }
+    }
+  },
+  "inference_config": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "gpu_device"
+    ],
+    "properties": {
+      "gpu_device": {
+        "$ref": "#/definitions/nonnegative_int"
+      },
+      "confidence_tag_name": {
+        "type": "string"
+      },
+      "num_processes": {
+        "$ref": "#/definitions/positive_int"
+      },
+      "min_confidence_threshold": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/positive_float"
+          },
+          {
+            "maximum": 1
+          }
+        ]
+      }
+    }
+  }
+}
